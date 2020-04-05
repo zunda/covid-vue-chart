@@ -1,5 +1,6 @@
 {
   "devDependencies": {
     "@vue/cli": "^4.3.0"
-  }
+  },
+  "license": "MIT"
 }
