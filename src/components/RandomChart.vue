@@ -1,6 +1,6 @@
 <template>
   <div class="small">
-    <line-chart :chart-data="datacollection"></line-chart>
+    <line-chart :chartData="datacollection"></line-chart>
     <button @click="fillData()">Randomize</button>
   </div>
 </template>
@@ -14,7 +14,7 @@
     },
     data () {
       return {
-        datacollection: null
+        datacollection: {}
       }
     },
     mounted () {
