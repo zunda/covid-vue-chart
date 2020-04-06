@@ -13,19 +13,24 @@
     },
     data: () => ({
       chartData: {
-        labels: ['2020-01-01', '', '2020-04-01'],
         datasets: [
           {
             label: 'Series 1',
             backgroundColor: '#f87979',
-            data: [1, 0, 2]
+            data: [
+              {x: new Date(2020, 1, 1), y: 1},
+              {x: new Date(2020, 2, 1), y: 0},
+              {x: new Date(2020, 4, 1), y: 2},
+            ]
           }
         ]
       },
       options: {
-        legend: {
-          display: false
-        }
+        scales: {
+          xAxes: [{
+            type: 'time'
+          }]
+        },
       }
     }),
   }
