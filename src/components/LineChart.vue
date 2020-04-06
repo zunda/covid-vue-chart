@@ -1,6 +1,6 @@
 <template>
   <div class="small">
-    <line-chart :chartData="datacollection"></line-chart>
+    <line-chart :chartData="chartData" :options="options"></line-chart>
   </div>
 </template>
 
@@ -12,7 +12,7 @@
       LineChart
     },
     data: () => ({
-      datacollection: {
+      chartData: {
         labels: ['2020-01-01', '', '2020-04-01'],
         datasets: [
           {
@@ -21,6 +21,11 @@
             data: [1, 0, 2]
           }
         ]
+      },
+      options: {
+        legend: {
+          display: false
+        }
       }
     }),
   }

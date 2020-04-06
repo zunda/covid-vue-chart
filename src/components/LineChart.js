@@ -8,7 +8,7 @@ export default {
       type: Object,
       default: null
     },
-    optinos: {
+    options: {
       type: Object,
       default: null
     },
