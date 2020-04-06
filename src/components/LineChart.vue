@@ -13,7 +13,7 @@
     },
     data: () => ({
       datacollection: {
-        labels: [1, 2, 3],
+        labels: ['2020-01-01', '', '2020-04-01'],
         datasets: [
           {
             label: 'Series 1',
