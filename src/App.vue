@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <RandomChart/>
+    <LineChart/>
   </div>
 </template>
 
 <script>
-import RandomChart from './components/RandomChart.vue'
+import LineChart from './components/LineChart.vue'
 
 export default {
   name: 'App',
   components: {
-    RandomChart
+    LineChart
   }
 }
 </script>
