@@ -1,6 +1,6 @@
 <template>
   <div class="chart">
-    <line-chart :chartData="chartData" :options="options"></line-chart>
+    <line-chart :chartData="chartData" :options="options" />
   </div>
 </template>
 
@@ -12,68 +12,71 @@
     components: {
       LineChart
     },
-    data: () => ({
-      chartData: {
-        datasets: timeSeries
-      },
-      options: {
-        animation: false,
-        datasets: {
-          line: {
-            fill: false,
-            lineTension: 0
-          }
+    data: function () {
+      var datasets = ['World', 'Japan', 'Japan/Tokyo'].map(r => ({label: r, data: timeSeries[r]}));
+      return {
+        chartData: {
+          datasets: datasets
         },
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: '2020'
-            },
-            type: 'time',
-            time: {
-              parser: (x) => {
-                var ymd = x.match(/\d+/g);
-                return(new Date(Date.UTC(
-                  parseInt(ymd[0], 10),
-                  parseInt(ymd[1], 10) - 1,
-                  parseInt(ymd[2], 10)
-                )));
-              },
-              unit: 'week',
-              displayFormats: {
-                week: 'M/D'
-              }
+        options: {
+          animation: false,
+          datasets: {
+            line: {
+              fill: false,
+              lineTension: 0
             }
-          }],
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Cumulative confirmed'
-            },
-            type: 'logarithmic',
-            ticks: {
-              callback: (value) => {
-                let r = String(value)
-                if (r.charAt(0) == '1') {
-                  return r
-                } else {
-                  return null
+          },
+          scales: {
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: '2020'
+              },
+              type: 'time',
+              time: {
+                parser: (x) => {
+                  var ymd = x.match(/\d+/g);
+                  return(new Date(Date.UTC(
+                    parseInt(ymd[0], 10),
+                    parseInt(ymd[1], 10) - 1,
+                    parseInt(ymd[2], 10)
+                  )));
+                },
+                unit: 'week',
+                displayFormats: {
+                  week: 'M/D'
                 }
               }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Cumulative confirmed'
+              },
+              type: 'logarithmic',
+              ticks: {
+                callback: (value) => {
+                  let r = String(value)
+                  if (r.charAt(0) == '1') {
+                    return r
+                  } else {
+                    return null
+                  }
+                }
+              }
+            }]
+          },
+          elements: {
+            point: {
+              radius: 1
             }
-          }]
-        },
-        elements: {
-          point: {
-            radius: 1
+          },
+          legend: {
+            position: 'right'
           }
-        },
-        legend: {
-          position: 'right'
         }
       }
-    }),
+    },
   }
 </script>
 
