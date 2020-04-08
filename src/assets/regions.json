@@ -1,0 +1,16 @@
+[
+  {
+    "id": "Japan",
+    "label": "Japan",
+    "children": [
+      {
+        "id": "Japan/Tokyo",
+        "label": "Tokyo"
+      }
+    ]
+  },
+  {
+    "id": "World",
+    "label": "World"
+  }
+]

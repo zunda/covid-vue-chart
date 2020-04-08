@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <LineChart/>
+    <RegionSelector/>
   </div>
 </template>
 
 <script>
 import LineChart from './components/LineChart.vue'
+import RegionSelector from './components/RegionSelector.vue'
 
 export default {
   name: 'App',
   components: {
-    LineChart
+    LineChart,
+    RegionSelector
   }
 }
 </script>
