@@ -2,10 +2,10 @@
   <div>
     <treeselect
       v-model="value"
-      :multiple="true"
-      :flat="true"
-      :sort-value-by="ORDER_SELECTED"
-      :value-consists-of="ALL"
+      :multiple="multiple"
+      :flat="flat"
+      :sort-value-by="sortValueBy"
+      :value-consists-of="valueConsistsOf"
       :options="options"
     />
   </div>
@@ -22,6 +22,10 @@
     },
     data: () => ({
       value: null,
+      multiple: true,
+      flat: true,
+      sortValueBy: "ORDER_SELECTED",
+      valueConsistsOf: "ALL",
       options: regions
     })
   }
