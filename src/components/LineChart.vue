@@ -6,7 +6,7 @@
 
 <script>
   import LineChart from './LineChart.js'
-  import timeSeries from './timeSeries.json'
+  import timeSeries from '../assets/timeSeries.json'
 
   export default {
     components: {
