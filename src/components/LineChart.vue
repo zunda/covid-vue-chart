@@ -1,6 +1,5 @@
 <template>
   <div class="chart">
-    <p>{{ regions }}</p>
     <line-chart :chartData="chartData" :options="options" />
   </div>
 </template>
@@ -16,13 +15,14 @@
     props: {
       regions: Array
     },
+    computed: {
+      chartData: function() {
+        var data = this.regions.map(r => ({label: r, data: timeSeries[r]}));
+        return { datasets: data }
+      }
+    },
     data: function () {
-      console.log(this.regions);
-      var datasets = this.regions.map(r => ({label: r, data: timeSeries[r]}));
       return {
-        chartData: {
-          datasets: datasets
-        },
         options: {
           animation: false,
           datasets: {
@@ -48,9 +48,7 @@
                   )));
                 },
                 unit: 'week',
-                displayFormats: {
-                  week: 'M/D'
-                }
+                displayFormats: { week: 'M/D' }
               }
             }],
             yAxes: [{
@@ -72,9 +70,7 @@
             }]
           },
           elements: {
-            point: {
-              radius: 1
-            }
+            point: { radius: 1 }
           },
           legend: {
             position: 'right'
