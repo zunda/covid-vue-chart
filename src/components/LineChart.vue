@@ -1,6 +1,6 @@
 <template>
   <div class="chart">
-    <line-chart :chartData="chartData" :options="options" regions="regions" />
+    <line-chart :chartData="chartData" :options="options" />
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LineChart v-bind:regions=value />
+    <LineChart :regions="value" />
     <treeselect
       v-model="value"
       :multiple="true"
@@ -9,6 +9,7 @@
       :value-consists-of="valueConsistsOf"
       :options="options"
     />
+    <p>{{ value }}</p>
   </div>
 </template>
 
