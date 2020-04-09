@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LineChart :regions="value" />
+    <LineChart v-bind:regions=value />
     <treeselect
       v-model="value"
       :multiple="true"
@@ -23,9 +23,6 @@
     components: {
       Treeselect,
       LineChart
-    },
-    state: {
-      value: Array
     },
     data: function () {
       return {
