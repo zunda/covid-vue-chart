@@ -1,6 +1,6 @@
 <template>
   <div class="chart">
-    <line-chart :chartData="chartData" :options="options" />
+    <line-chart :chartData="chartData" :options="options" regions="regions" />
   </div>
 </template>
 
@@ -12,8 +12,12 @@
     components: {
       LineChart
     },
+    props: {
+      regions: Array
+    },
     data: function () {
-      var datasets = ['World', 'Japan', 'Japan/Tokyo'].map(r => ({label: r, data: timeSeries[r]}));
+      console.log(this.regions);
+      var datasets = this.regions.map(r => ({label: r, data: timeSeries[r]}));
       return {
         chartData: {
           datasets: datasets

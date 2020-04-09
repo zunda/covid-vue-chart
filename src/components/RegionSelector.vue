@@ -1,9 +1,10 @@
 <template>
   <div>
+    <LineChart :regions="value" />
     <treeselect
       v-model="value"
-      :multiple="multiple"
-      :flat="flat"
+      :multiple="true"
+      :flat="true"
       :sort-value-by="sortValueBy"
       :value-consists-of="valueConsistsOf"
       :options="options"
@@ -16,17 +17,23 @@
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import regions from '../assets/regions.json'
 
+  import LineChart from './LineChart.vue'
+
   export default {
     components: {
-      Treeselect
+      Treeselect,
+      LineChart
     },
-    data: () => ({
-      value: null,
-      multiple: true,
-      flat: true,
-      sortValueBy: "ORDER_SELECTED",
-      valueConsistsOf: "ALL",
-      options: regions
-    })
+    state: {
+      value: Array
+    },
+    data: function () {
+      return {
+        value: ['World'],
+        options: regions,
+        sortValueBy: "ORDER_SELECTED",
+        valueConsistsOf: "ALL"
+      }
+    }
   }
 </script>
