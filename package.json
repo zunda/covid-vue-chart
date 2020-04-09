@@ -1,7 +1,11 @@
 {
-  "name": "",
-  "version": "",
-  "private": true,
+  "name": "CovidVueChart",
+  "version": "0.0.1",
+  "description": "Vue application to plot time series for COVID-19 cases",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/zunda/covid-vue-chart.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
