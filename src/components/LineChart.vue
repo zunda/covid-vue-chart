@@ -25,6 +25,7 @@
       return {
         options: {
           animation: false,
+          maintainAspectRatio: true,
           datasets: {
             line: {
               fill: false,
@@ -73,7 +74,7 @@
             point: { radius: 1 }
           },
           legend: {
-            position: 'right'
+            position: 'top'
           }
         }
       }
@@ -83,7 +84,8 @@
 
 <style>
   .chart {
+    width: 90%;
     max-width: 600px;
-    margin:  150px auto;
+    margin: 1em auto;
   }
 </style>

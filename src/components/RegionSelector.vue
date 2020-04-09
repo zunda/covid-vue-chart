@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LineChart :regions="value" />
     <treeselect
       v-model="value"
       :multiple="true"
@@ -8,7 +9,6 @@
       :value-consists-of="valueConsistsOf"
       :options="options"
     />
-    <LineChart :regions="value" />
   </div>
 </template>
 
