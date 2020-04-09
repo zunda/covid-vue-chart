@@ -34,3 +34,9 @@
     }
   }
 </script>
+
+<style>
+.vue-treeselect {
+  margin: 1em;
+}
+</style>
