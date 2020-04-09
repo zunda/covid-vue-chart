@@ -26,13 +26,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## License
 ### The app code
-Copyright 2020 zunda <zundan at gmail.com>
-
-Under [MIT License](LICENSE.txt).
+Copyright 2020 by zunda, under [MIT License](LICENSE.txt).
 
 ### Favicon
 https://fontawesome.com/icons/clinic-medical
 
-Copyrigh Fonticons, Inc.
-
-Under [CC BY 4.0 License](https://fontawesome.com/license/free).
+Copyright by Fonticons, Inc., under [CC BY 4.0 License](https://fontawesome.com/license/free).
