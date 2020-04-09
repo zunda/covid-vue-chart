@@ -1,5 +1,6 @@
 <template>
   <div class="chart">
+    <p>{{ regions }}</p>
     <line-chart :chartData="chartData" :options="options" />
   </div>
 </template>
