@@ -3,11 +3,9 @@
     <h1>Time series from COVID-19 cases</h1>
     <RegionSelector/>
     <div id="footer">
-      <p>
-        World and US data from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
-        Tokyo data from <a href="https://github.com/tokyo-metropolitan-gov/covid19">tokyo-metropolitan-gov/covid19</a> &copy; 2020 Tokyo Metropolitan Government and other contributors.
-      </p>
-      <p>Fork me at <a href="https://github.com/zunda/covid-vue-chart">zunda/covid-vue-chart</a>.</p>
+      Global and US data from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
+      Data for Japan from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
+      Fork me at <a href="https://github.com/zunda/covid-vue-chart">zunda/covid-vue-chart</a>.
     </div>
   </div>
 </template>

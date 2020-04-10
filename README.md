@@ -6,6 +6,13 @@ Vue application to plot time series from COVID-19 cases
 yarn install
 ```
 
+### Fetches and formats data to be plotted
+Creates 'src/assets/regions.json' and 'src/assets/timeSeries.json'.
+
+```
+yarn fetchdata
+```
+
 ### Compiles and hot-reloads for development
 ```
 yarn serve
