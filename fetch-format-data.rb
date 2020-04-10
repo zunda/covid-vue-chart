@@ -54,7 +54,7 @@ CSV.parse(open(GLOBAL_CONFIRMED).read, headers:true).each do |data|
   c = data['Country/Region'].strip
   s = data['Province/State']&.strip
   count_up_jhu(counts, data, [c])
-  #count_up_jhu(counts, data, [c, s]) if s and not s.empty?
+  count_up_jhu(counts, data, [c, s]) if s and not s.empty?
   count_up_jhu(counts, data, ['World'])
 end
 
