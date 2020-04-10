@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Time series from COVID-19 cases</h1>
+    <h1>COVID-19 cases</h1>
     <RegionSelector/>
     <div id="footer">
       Global and US data from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
