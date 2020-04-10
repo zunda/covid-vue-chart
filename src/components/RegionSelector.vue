@@ -5,6 +5,7 @@
       v-model="value"
       :multiple="true"
       :flat="true"
+      :searchable="false"
       :sort-value-by="sortValueBy"
       :value-consists-of="valueConsistsOf"
       :options="options"
