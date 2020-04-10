@@ -1,6 +1,11 @@
 <template>
   <div class="chart">
     <line-chart :chartData="chartData" :options="options" />
+    <div id="footer">
+      Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
+      Data for Japan are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
+      Fork me at <a href="https://github.com/zunda/covid-vue-chart">zunda/covid-vue-chart</a>.
+    </div>
   </div>
 </template>
 
@@ -87,5 +92,14 @@
     width: 90%;
     max-width: 600px;
     margin: 0 auto;
+  }
+  #footer {
+    margin: 1em;
+    font-size: 75%;
+    text-align: left;
+    color: gray;
+  }
+  #footer p {
+    margin: 0.2em;
   }
 </style>
