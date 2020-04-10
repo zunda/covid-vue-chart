@@ -9,7 +9,7 @@
   "scripts": {
     "fetchdata": "ruby fetch-format-data.rb",
     "serve": "vue-cli-service serve",
-    "build": "yarn fetchdata;vue-cli-service build",
+    "build": "yarn fetchdata && vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
