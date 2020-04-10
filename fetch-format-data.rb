@@ -20,6 +20,7 @@ US_CONFIRMED='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/c
 JAPAN_CONFIRMED='https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/prefectures.csv'
 
 # output
+TIMESTAMPS='src/assets/timestamps.json'
 REGIONS='src/assets/regions.json'
 TIMESERIES='src/assets/timeSeries.json'
 
@@ -97,6 +98,7 @@ def count_up_jhu(hash, row, region)
   end
 end
 
+timestamps = {refreshed: Time.now.utc}
 counts = Hash.new{|h, region| h[region] = Hash.new{|j, date| j[date] = 0}}
 
 $stderr.puts "Fetching and counting global data"
@@ -159,4 +161,7 @@ counts.each_pair do |r, c|
 end
 File.open(TIMESERIES, 'w') do |f|
   f.print time_series.to_json
+end
+File.open(TIMESTAMPS, 'w') do |f|
+  f.print timestamps.to_json
 end

@@ -23,3 +23,4 @@ yarn-error.log*
 # Artifacts
 src/assets/regions.json
 src/assets/timeSeries.json
+src/assets/timestamps.json
