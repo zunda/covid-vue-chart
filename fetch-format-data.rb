@@ -18,6 +18,7 @@ require 'open-uri'
 GLOBAL_CONFIRMED='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 US_CONFIRMED='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv'
 JAPAN_CONFIRMED='https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/prefectures.csv'
+TOKYO_CONFIRMED='https://stopcovid19.metro.tokyo.lg.jp/data/130001_tokyo_covid19_patients.csv'
 
 # output
 TIMESTAMPS='src/assets/timestamps.json'
@@ -126,6 +127,25 @@ CSV.parse(open(JAPAN_CONFIRMED).read, headers:true).each do |data|
   region = ['Japan', p]
   date = Time.utc(data['年'], data['月'], data['日'])
   counts[region][date] += Integer(data['患者数（2020年3月28日からは感染者数）'])
+end
+
+$stderr.puts "Fetching and counting data for Tokyo"
+c = Hash.new{0}
+CSV.parse(open(TOKYO_CONFIRMED).read, headers:true).map do |record|
+  next unless record['公表_年月日']
+  begin
+    date = Time.strptime(record['公表_年月日'] + " UTC", "%Y-%m-%d %z")
+  rescue NoMethodError => err
+    raise err.exception(record.inspect)
+  end
+  c[date] += 1
+end
+r = ['Japan', 'Tokyo']
+counts.delete(r)
+n = 0
+c.keys.sort.each do |date|
+  n += c[date]
+  counts[r][date] = n
 end
 
 $stderr.puts "Listing regions"
