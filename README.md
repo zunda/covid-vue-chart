@@ -1,4 +1,6 @@
 # covid-vue-chart
+[![Netlify Status](https://api.netlify.com/api/v1/badges/3ada0c46-6f37-4736-a2ec-17d00b749ece/deploy-status)](https://app.netlify.com/sites/zunda-covid-vue-chart/deploys)
+
 Vue application to plot time series from COVID-19 cases
 
 ## Project setup
