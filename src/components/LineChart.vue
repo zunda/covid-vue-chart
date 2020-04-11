@@ -5,6 +5,7 @@
       Data were refreshed around {{ timestamps.refreshed }}.
       Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
       Data for Japan are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
+      Data for Tokyo are from <a href="https://stopcovid19.metro.tokyo.lg.jp/">stopcovid19.metro.tokyo.lg.jp</a> &copy; 2020 Tokyo Metropolitan Government.
       Fork me at <a href="https://github.com/zunda/covid-vue-chart">zunda/covid-vue-chart</a>.
     </div>
   </div>
@@ -66,9 +67,10 @@
               },
               type: 'logarithmic',
               ticks: {
-                callback: (value) => {
-                  let r = String(value)
-                  if (r.charAt(0) == '1') {
+                callback: function (value, index, values) {
+                  var r = value.toLocaleString();
+                  var m = values.length > 25 ? 2 : 6;
+                  if (parseInt(r.charAt(0)) < m) {
                     return r
                   } else {
                     return null
