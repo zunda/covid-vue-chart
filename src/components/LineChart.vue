@@ -66,9 +66,10 @@
               },
               type: 'logarithmic',
               ticks: {
-                callback: (value) => {
-                  let r = String(value)
-                  if (r.charAt(0) == '1') {
+                callback: function (value, index, values) {
+                  var r = value.toLocaleString();
+                  var m = values.length > 25 ? 2 : 6;
+                  if (parseInt(r.charAt(0)) < m) {
                     return r
                   } else {
                     return null
