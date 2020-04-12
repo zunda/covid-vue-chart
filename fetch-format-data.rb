@@ -177,7 +177,7 @@ end
 $stderr.puts "Formatting data"
 time_series = Hash.new
 counts.each_pair do |r, c|
-  time_series[r.join("/")] = c.keys.sort.map{|d| {x: d.strftime("%Y-%m-%d"), y: c[d]}}
+  time_series[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
 end
 File.open(TIMESERIES, 'w') do |f|
   f.print time_series.to_json

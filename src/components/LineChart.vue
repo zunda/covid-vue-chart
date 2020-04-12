@@ -48,14 +48,6 @@
               },
               type: 'time',
               time: {
-                parser: (x) => {
-                  var ymd = x.match(/\d+/g);
-                  return(new Date(Date.UTC(
-                    parseInt(ymd[0], 10),
-                    parseInt(ymd[1], 10) - 1,
-                    parseInt(ymd[2], 10)
-                  )));
-                },
                 unit: 'week',
                 displayFormats: { week: 'M/D' }
               }
