@@ -103,7 +103,7 @@ timestamps = {refreshed: Time.now.utc}
 counts = Hash.new{|h, region| h[region] = Hash.new{|j, date| j[date] = 0}}
 
 $stderr.puts "Fetching and counting global data"
-CSV.parse(open(GLOBAL_CONFIRMED).read, headers:true).each do |data|
+CSV.parse(open(GLOBAL_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
   c = data['Country/Region'].strip
   s = data['Province/State']&.strip
   count_up_jhu(counts, data, [c])
@@ -112,7 +112,7 @@ CSV.parse(open(GLOBAL_CONFIRMED).read, headers:true).each do |data|
 end
 
 $stderr.puts "Fetching and counting data for US"
-CSV.parse(open(US_CONFIRMED).read, headers:true).each do |data|
+CSV.parse(open(US_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
   c = data['Country_Region'].strip
   s = data['Province_State'].strip
   a = data['Admin2']&.strip
@@ -121,7 +121,7 @@ CSV.parse(open(US_CONFIRMED).read, headers:true).each do |data|
 end
 
 $stderr.puts "Fetching and counting data for Japan"
-CSV.parse(open(JAPAN_CONFIRMED).read, headers:true).each do |data|
+CSV.parse(open(JAPAN_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
   p = data['都道府県'].strip
   p = Prefectures[p] || p
   region = ['Japan', p]
@@ -131,7 +131,7 @@ end
 
 $stderr.puts "Fetching and counting data for Tokyo"
 c = Hash.new{0}
-CSV.parse(open(TOKYO_CONFIRMED).read, headers:true).map do |record|
+CSV.parse(open(TOKYO_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).map do |record|
   next unless record['公表_年月日']
   begin
     date = Time.strptime(record['公表_年月日'] + " UTC", "%Y-%m-%d %z")
