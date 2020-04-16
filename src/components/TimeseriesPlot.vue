@@ -1,6 +1,6 @@
 <template>
   <div class="chart">
-    <line-chart :chartData="chartData" :options="options" />
+    <LineChart :chartData="chartData" :options="options" />
     <div id="footer">
       Data were refreshed around {{ timestamps.refreshed }}.
       Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
@@ -27,11 +27,9 @@
       chartData: function() {
         var data = this.regions.map(r => ({label: r, data: timeSeries[r]}));
         return { datasets: data }
-      }
-    },
-    data: function () {
-      return {
-        options: {
+      },
+      options: function () {
+        return {
           animation: false,
           maintainAspectRatio: true,
           datasets: {
@@ -77,10 +75,12 @@
           legend: {
             position: 'top'
           }
-        },
-        timestamps: timestamps
+        }
+      },
+      timestamps: function() {
+        return timestamps
       }
-    },
+    }
   }
 </script>
 

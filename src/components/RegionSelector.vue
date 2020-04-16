@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LineChart :regions="value" />
+    <TimeseriesPlot :regions="value" />
     <treeselect
       v-model="value"
       :multiple="true"
@@ -19,12 +19,12 @@
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import regions from '../assets/regions.json'
 
-  import LineChart from './LineChart.vue'
+  import TimeseriesPlot from './TimeseriesPlot.vue'
 
   export default {
     components: {
       Treeselect,
-      LineChart
+      TimeseriesPlot
     },
     data: function () {
       return {
