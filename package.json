@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Vue application to plot time series for COVID-19 cases",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/zunda/covid-vue-chart.git"
+    "type": "git",
+    "url": "https://github.com/zunda/covid-vue-chart.git"
   },
   "scripts": {
     "fetchdata": "ruby fetch-format-data.rb",
@@ -14,11 +14,10 @@
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.4.0",
+    "@syncfusion/ej2-vue-charts": "^18.1.44",
     "chart.js": "^2.9.3",
-    "chartjs-plugin-colorschemes": "^0.4.0",
     "core-js": "^3.6.4",
-    "vue": "^2.6.11",
-    "vue-chartjs": "^3.5.0"
+    "vue": "^2.6.11"
   },
   "devDependencies": {
     "@vue/cli": "^4.3.0",

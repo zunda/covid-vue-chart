@@ -1,6 +1,10 @@
 <template>
-  <div class="chart">
-    <LineChart :chartData="chartData" :options="options" />
+  <div id="chart">
+    <ejs-chart id="container" :primaryXAxis="primaryXAxis" :primaryYAxis="primaryYAxis" :legendSettings="legendSettings" :tooltip="tooltip">
+      <e-series-collection>
+        <e-series v-for="s in dataSets" :dataSource=s.dataSource :name=s.name :key=s.name type="Line" xName="x" yName="y" :marker='marker' />
+      </e-series-collection>
+    </ejs-chart>
     <div id="footer">
       Data were refreshed around {{ timestamps.refreshed }}.
       Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
@@ -12,70 +16,48 @@
 </template>
 
 <script>
-  import LineChart from './LineChart.js'
+  import Vue from 'vue'
+  import { ChartPlugin, LineSeries, Logarithmic, DateTime, Legend, Tooltip } from '@syncfusion/ej2-vue-charts'
+  Vue.use(ChartPlugin)
+
   import timeSeries from '../assets/timeSeries.json'
   import timestamps from '../assets/timestamps.json'
 
   export default {
-    components: {
-      LineChart
+    provide: {
+      chart: [LineSeries, Logarithmic, DateTime, Legend, Tooltip]
     },
     props: {
       regions: Array
     },
+    data: function() {
+      return {
+        primaryXAxis: {
+          valueType: 'DateTime',
+          title: 'Date'
+        },
+        primaryYAxis: {
+          valueType: 'Logarithmic',
+          title: 'Columutive confirmed'
+        },
+        marker: {
+          visible: true,
+          width: 1,
+          height: 1
+        },
+        legendSettings: {
+          visible: true,
+          position: 'Top'
+        },
+        tooltip: {
+          enable: true
+        },
+        title: 'COVID-19 cases'
+      }
+    },
     computed: {
-      chartData: function() {
-        var data = this.regions.map(r => ({label: r, data: timeSeries[r]}));
-        return { datasets: data }
-      },
-      options: function () {
-        return {
-          animation: false,
-          maintainAspectRatio: true,
-          datasets: {
-            line: {
-              fill: false,
-              lineTension: 0
-            }
-          },
-          scales: {
-            xAxes: [{
-              scaleLabel: {
-                display: true,
-                labelString: '2020'
-              },
-              type: 'time',
-              time: {
-                unit: 'week',
-                displayFormats: { week: 'M/D' }
-              }
-            }],
-            yAxes: [{
-              scaleLabel: {
-                display: true,
-                labelString: 'Cumulative confirmed'
-              },
-              type: 'logarithmic',
-              ticks: {
-                callback: function (value, index, values) {
-                  var r = value.toLocaleString();
-                  var m = values.length > 25 ? 2 : 6;
-                  if (parseInt(r.charAt(0)) < m) {
-                    return r
-                  } else {
-                    return null
-                  }
-                }
-              }
-            }]
-          },
-          elements: {
-            point: { radius: 1 }
-          },
-          legend: {
-            position: 'top'
-          }
-        }
+      dataSets: function() {
+        return this.regions.map(r => ({name: r, dataSource: timeSeries[r]}))
       },
       timestamps: function() {
         return timestamps
@@ -85,9 +67,9 @@
 </script>
 
 <style>
-  .chart {
+  #chart {
+    max-width: 800px;
     width: 90%;
-    max-width: 600px;
     margin: 0 auto;
   }
   #footer {
