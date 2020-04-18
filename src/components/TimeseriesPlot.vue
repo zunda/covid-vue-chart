@@ -59,12 +59,12 @@
               ticks: {
                 callback: function (value, index, values) {
                   var r = value.toLocaleString();
-                  var m = values.length > 25 ? 2 : 6;
-                  if (parseInt(r.charAt(0)) < m) {
-                    return r
-                  } else {
-                    return null
-                  }
+                  if (r.match(/^[1-9][,0]*$/) === null) { return null }
+                  var m = 1
+                  if (values.length < 25) { m = 5 }
+                  if (values.length < 14) { m = 9 }
+                  if (parseInt(r.charAt(0)) > m) { return null }
+                  return r
                 }
               }
             }]
