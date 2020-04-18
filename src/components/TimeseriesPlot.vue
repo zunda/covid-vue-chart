@@ -1,6 +1,6 @@
 <template>
   <div id="chart">
-    <ejs-chart id="container" :primaryXAxis="primaryXAxis" :primaryYAxis="primaryYAxis" :legendSettings="legendSettings" :tooltip="tooltip">
+    <ejs-chart id="container" :primaryXAxis="primaryXAxis" :primaryYAxis="primaryYAxis" :legendSettings="legendSettings" :tooltip="tooltip" :zoomSettings="zoom">
       <e-series-collection>
         <e-series v-for="s in dataSets" :dataSource=s.dataSource :name=s.name :key=s.name type="Line" xName="x" yName="y" :marker='marker' />
       </e-series-collection>
@@ -17,7 +17,7 @@
 
 <script>
   import Vue from 'vue'
-  import { ChartPlugin, LineSeries, Logarithmic, DateTime, Legend, Tooltip } from '@syncfusion/ej2-vue-charts'
+  import { ChartPlugin, LineSeries, Logarithmic, DateTime, Legend, Tooltip, Zoom } from '@syncfusion/ej2-vue-charts'
   Vue.use(ChartPlugin)
 
   import timeSeries from '../assets/timeSeries.json'
@@ -25,7 +25,7 @@
 
   export default {
     provide: {
-      chart: [LineSeries, Logarithmic, DateTime, Legend, Tooltip]
+      chart: [LineSeries, Logarithmic, DateTime, Legend, Tooltip, Zoom]
     },
     props: {
       regions: Array
@@ -34,7 +34,7 @@
       return {
         primaryXAxis: {
           valueType: 'DateTime',
-          title: 'Date'
+          title: 'Date',
         },
         primaryYAxis: {
           valueType: 'Logarithmic',
@@ -51,6 +51,10 @@
         },
         tooltip: {
           enable: true
+        },
+        zoom: {
+          enablePinchZooming: true,
+          enableSelectionZooming: true
         },
         title: 'COVID-19 cases'
       }
