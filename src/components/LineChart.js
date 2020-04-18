@@ -1,5 +1,6 @@
 import { Line, mixins } from 'vue-chartjs'
 import 'chartjs-plugin-colorschemes'
+import 'chartjs-plugin-zoom'
 
 export default {
   extends: Line,

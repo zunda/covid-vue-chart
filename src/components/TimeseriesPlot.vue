@@ -74,6 +74,16 @@
           },
           legend: {
             position: 'top'
+          },
+          plugins: {
+            zoom: {
+              zoom: {
+                enabled: true,
+                drag: true,
+                mode: 'xy',
+                speed: 0
+              }
+            }
           }
         }
       },
