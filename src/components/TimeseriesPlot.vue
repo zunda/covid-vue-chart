@@ -61,7 +61,13 @@
     },
     computed: {
       dataSets: function() {
-        return this.regions.map(r => ({name: r, dataSource: timeSeries[r]}))
+        return this.regions.map(function(r) {
+          if (timeSeries[r] !== undefined) {
+            return {name: r, dataSource: timeSeries[r]}
+          } else {
+            return {}
+          }
+        })
       },
       timestamps: function() {
         return timestamps
