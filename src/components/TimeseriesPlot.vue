@@ -80,7 +80,7 @@
               zoom: {
                 enabled: true,
                 drag: true,
-                mode: 'xy',
+                mode: 'x',
                 speed: 0
               }
             }
