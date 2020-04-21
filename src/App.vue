@@ -18,11 +18,15 @@ const store = new Vuex.Store({
   },
   mutations: {
     setRegions: function(state, regions) {
-      history.replaceState(null, null, "?r=" + regions.join("-").replace(/ /g, "+"));
       state.regions = regions
+      updateLocation(state)
     }
-  }
+  },
 })
+
+function updateLocation(state) {
+  history.replaceState(null, null, "?r=" + state.regions.join("-").replace(/ /g, "+"));
+}
 
 export default {
   name: 'App',
