@@ -9,7 +9,6 @@
       :sort-value-by="sortValueBy"
       :value-consists-of="valueConsistsOf"
       :options="options"
-      @input="updateQuery"
     />
   </div>
 </template>
@@ -26,25 +25,21 @@
       Treeselect,
       TimeseriesPlot
     },
+    computed: {
+      value: {
+        get() {
+          return this.$store.state.regions
+        },
+        set(ary) {
+          this.$store.commit('set_regions',  ary)
+        },
+      }
+    },
     data: function () {
       return {
-        value: [],
         options: regions,
         sortValueBy: "ORDER_SELECTED",
         valueConsistsOf: "ALL"
-      }
-    },
-    mounted: function () {
-      var q = new URLSearchParams(location.search).getAll("r").map(x => x.split("-")).flat().filter(x => x.length > 0);
-      if (q.length > 0) {
-        this.value = q;
-      } else {
-        this.value = ['World'];
-      }
-    },
-    methods: {
-      updateQuery: function (value) {
-        history.replaceState(null, null, "?r=" + value.join("-").replace(/ /g, "+"));
       }
     }
   }
