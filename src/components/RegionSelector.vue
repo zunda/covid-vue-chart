@@ -31,7 +31,7 @@
           return this.$store.state.regions
         },
         set(ary) {
-          this.$store.commit('set_regions',  ary)
+          this.$store.commit('setRegions',  ary)
         },
       }
     },

@@ -17,7 +17,7 @@ const store = new Vuex.Store({
     regions: []
   },
   mutations: {
-    set_regions: function(state, regions) {
+    setRegions: function(state, regions) {
       history.replaceState(null, null, "?r=" + regions.join("-").replace(/ /g, "+"));
       state.regions = regions
     }
@@ -33,9 +33,9 @@ export default {
   mounted: function() {
     var q = new URLSearchParams(location.search).getAll("r").map(x => x.split("-")).flat().filter(x => x.length > 0)
     if (q.length > 0) {
-      store.commit('set_regions',  q)
+      store.commit('setRegions',  q)
     } else {
-      store.commit('set_regions',  ['World'])
+      store.commit('setRegions',  ['World'])
     }
   }
 }
