@@ -25,9 +25,9 @@
     },
     computed: {
       chartData: function() {
-        let ds = this.regions.map(r => ({label: r, data: timeSeries[r]}))
+        let ds = this.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: timeSeries[r]}))
         let max = Math.max(...
-          ds.filter(x => x.data != undefined).map(x => x.data[x.data.length - 1].x)
+          ds.map(x => x.data[x.data.length - 1].x)
         )
         return { datasets: ds, timeMax: max }
       },
