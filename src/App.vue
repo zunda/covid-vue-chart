@@ -14,24 +14,50 @@ import RegionSelector from './components/RegionSelector.vue'
 
 const store = new Vuex.Store({
   state: {
-    regions: []
+    regions: [],
+    duration: undefined
   },
   mutations: {
     setRegions: function(state, regions) {
       state.regions = regions
+      updateLocation(state)
+    },
+    setDuration: function(state, duration) {
+      state.duration = duration
       updateLocation(state)
     }
   },
 })
 
 function updateLocation(state) {
-  history.replaceState(null, null, "?r=" + state.regions.join("-").replace(/ /g, "+"));
+  let pars = []
+  if (state.regions.length > 0) {
+    pars.push("r=" + state.regions.join("-").replace(/ /g, "+"))
+  }
+  if (state.duration != undefined) {
+    pars.push("t=" + state.duration / (24 * 3600 * 1000))
+  }
+  let q = ''
+  if (pars.length > 0) {
+    q = '?' + pars.join("&")
+  }
+  history.replaceState(null, null, q)
 }
 
 function parseLocation() {
   let q = new URLSearchParams(location.search)
-  let r = q.getAll("r").map(x => x.split("-")).flat().filter(x => x.length > 0)
-  return {r: r}
+  let res = {
+    regions: q.getAll("r").map(x => x.split("-")).flat().filter(x => x.length > 0),
+    duration: undefined
+  }
+  let t = q.get("t")
+  if (t != undefined) {
+    let x = parseFloat(t)
+    if (!isNaN(x)) {
+      res.duration = x * 24 * 3600 * 1000
+    }
+  }
+  return res
 }
 
 export default {
@@ -42,11 +68,12 @@ export default {
   },
   mounted: function() {
     let q = parseLocation()
-    if (q.r.length > 0) {
-      store.commit('setRegions',  q.r)
+    if (q.regions.length > 0) {
+      store.commit('setRegions',  q.regions)
     } else {
       store.commit('setRegions',  ['World'])
     }
+    store.commit('setDuration', q.duration)
   }
 }
 </script>

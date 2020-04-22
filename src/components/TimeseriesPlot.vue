@@ -25,10 +25,17 @@
     },
     computed: {
       chartData: function() {
-        var data = this.regions.map(r => ({label: r, data: timeSeries[r]}));
-        return { datasets: data }
+        let ds = this.regions.map(r => ({label: r, data: timeSeries[r]}))
+        let max = Math.max(...
+          ds.filter(x => x.data != undefined).map(x => x.data[x.data.length - 1].x)
+        )
+        return { datasets: ds, timeMax: max }
       },
       options: function () {
+        let x0Ticks = {}
+        if (this.$store.state.duration != undefined && this.chartData.timeMax != undefined) {
+          x0Ticks.min = this.chartData.timeMax + this.$store.state.duration
+        }
         return {
           animation: false,
           maintainAspectRatio: true,
@@ -48,7 +55,8 @@
               time: {
                 unit: 'week',
                 displayFormats: { week: 'M/D' }
-              }
+              },
+              ticks: x0Ticks
             }],
             yAxes: [{
               scaleLabel: {
