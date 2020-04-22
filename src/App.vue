@@ -28,6 +28,12 @@ function updateLocation(state) {
   history.replaceState(null, null, "?r=" + state.regions.join("-").replace(/ /g, "+"));
 }
 
+function parseLocation() {
+  let q = new URLSearchParams(location.search)
+  let r = q.getAll("r").map(x => x.split("-")).flat().filter(x => x.length > 0)
+  return {r: r}
+}
+
 export default {
   name: 'App',
   store,
@@ -35,9 +41,9 @@ export default {
     RegionSelector
   },
   mounted: function() {
-    var q = new URLSearchParams(location.search).getAll("r").map(x => x.split("-")).flat().filter(x => x.length > 0)
-    if (q.length > 0) {
-      store.commit('setRegions',  q)
+    let q = parseLocation()
+    if (q.r.length > 0) {
+      store.commit('setRegions',  q.r)
     } else {
       store.commit('setRegions',  ['World'])
     }
