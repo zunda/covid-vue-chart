@@ -33,8 +33,14 @@
       },
       options: function () {
         let x0Ticks = {}
+        let y0Ticks = {}
         if (this.$store.state.duration != undefined && this.chartData.timeMax != undefined) {
           x0Ticks.min = this.chartData.timeMax + this.$store.state.duration
+          let p = this.chartData.datasets.map(x => x.data.filter(p => p.x > x0Ticks.min).map(p => p.y)).flat()
+          let min = Math.min(...p)
+          let max = Math.max(...p)
+          let mergin = Math.pow(max/min, 0.05)
+          y0Ticks = {min: min/mergin, max: max*mergin}
         }
         return {
           animation: false,
@@ -65,6 +71,7 @@
               },
               type: 'logarithmic',
               ticks: {
+                ...y0Ticks,
                 callback: function (value, index, values) {
                   var r = value.toLocaleString();
                   if (r.match(/^[1-9][,0]*$/) === null) { return null }
