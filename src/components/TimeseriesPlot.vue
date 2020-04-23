@@ -31,17 +31,25 @@
       options: function () {
         let x0Ticks = {}
         let y0Ticks = {}
-        if (this.$store.state.duration != undefined && this.chartData.timeMax != undefined) {
+        if (this.$store.state.range != undefined) {
+          x0Ticks.min = this.$store.state.range.min
+          x0Ticks.max = this.$store.state.range.max
+        } else if (this.$store.state.duration != undefined && this.chartData.timeMax != undefined) {
           x0Ticks.min = this.chartData.timeMax + this.$store.state.duration
-          let p = this.chartData.datasets.map(x => x.data.filter(p => p.x > x0Ticks.min).map(p => p.y)).flat()
+          x0Ticks.max = undefined
+        }
+        if (x0Ticks.min != undefined) {
+          let p = (x0Ticks.max != undefined) ?
+            this.chartData.datasets.map(x => x.data.filter(p => x0Ticks.max >= p.x && p.x >= x0Ticks.min).map(p => p.y)).flat() :
+            this.chartData.datasets.map(x => x.data.filter(p => p.x >= x0Ticks.min).map(p => p.y)).flat()
           let min = Math.min(...p)
           let max = Math.max(...p)
           let mergin = Math.pow(max/min, 0.05)
           y0Ticks = {min: min/mergin, max: max*mergin}
         }
-        let d = ((this.$store.state.duration != undefined)
-          ? -this.$store.state.duration
-          : (this.chartData.timeMax - this.chartData.timeMin)
+        let d = (
+          ((x0Ticks.max != undefined) ? x0Ticks.max : this.chartData.timeMax) -
+          ((x0Ticks.min != undefined) ? x0Ticks.min : this.chartData.timeMin)
         ) / ( 24*3600*1000 )
         let xUnit = 'month'
         if (d < 1.5) {
