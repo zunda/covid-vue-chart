@@ -29,7 +29,10 @@
         let max = Math.max(...
           ds.map(x => x.data[x.data.length - 1].x)
         )
-        return { datasets: ds, timeMax: max }
+        let min = Math.min(...
+          ds.map(x => x.data[0].x)
+        )
+        return { datasets: ds, timeMax: max, timeMin: min }
       },
       options: function () {
         let x0Ticks = {}
@@ -41,6 +44,18 @@
           let max = Math.max(...p)
           let mergin = Math.pow(max/min, 0.05)
           y0Ticks = {min: min/mergin, max: max*mergin}
+        }
+        let d = ((this.$store.state.duration != undefined)
+          ? -this.$store.state.duration
+          : (this.chartData.timeMax - this.chartData.timeMin)
+        ) / ( 24*3600*1000 )
+        let xUnit = 'month'
+        if (d < 1.5) {
+          xUnit = 'hour'
+        } else if (d < 11) {
+          xUnit = 'day'
+        } else if (d < 180) {
+          xUnit = 'week'
         }
         return {
           animation: false,
@@ -59,8 +74,12 @@
               },
               type: 'time',
               time: {
-                unit: 'week',
-                displayFormats: { week: 'M/D' }
+                unit: xUnit,
+                displayFormats: {
+                  day: 'M/D',
+                  week: 'M/D',
+                  month: 'M/D'
+                }
               },
               ticks: x0Ticks
             }],
