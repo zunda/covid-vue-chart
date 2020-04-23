@@ -20,11 +20,12 @@
     computed: {
       chartData: function() {
         let ds = this.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: timeSeries[r]}))
-        let max = Math.max(...
-          ds.map(x => x.data[x.data.length - 1].x)
-        )
+        // Each data need to be sorted with timestamps
         let min = Math.min(...
           ds.map(x => x.data[0].x)
+        )
+        let max = Math.max(...
+          ds.map(x => x.data[x.data.length - 1].x)
         )
         return { datasets: ds, timeMax: max, timeMin: min }
       },
