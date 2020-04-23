@@ -1,20 +1,14 @@
 <template>
   <div class="chart">
     <LineChart :chartData="chartData" :options="options" />
-    <div id="footer">
-      Data were refreshed around {{ timestamps.refreshed }}.
-      Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
-      Data for Japan are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
-      Data for Tokyo are from <a href="https://stopcovid19.metro.tokyo.lg.jp/">stopcovid19.metro.tokyo.lg.jp</a> &copy; 2020 Tokyo Metropolitan Government.
-      Fork me at <a href="https://github.com/zunda/covid-vue-chart">zunda/covid-vue-chart</a>.
-    </div>
+    <div id="footer" v-html="footnote" />
   </div>
 </template>
 
 <script>
   import LineChart from './LineChart.js'
   import timeSeries from '../assets/timeSeries.json'
-  import timestamps from '../assets/timestamps.json'
+  import footnote from '../assets/footnote.json'
 
   export default {
     components: {
@@ -121,8 +115,8 @@
           }
         }
       },
-      timestamps: function() {
-        return timestamps
+      footnote: function() {
+        return footnote
       }
     }
   }
@@ -137,7 +131,7 @@
   #footer {
     margin: 1em;
     font-size: 75%;
-    text-align: left;
+    text-align: justify;
     color: gray;
   }
   #footer p {
