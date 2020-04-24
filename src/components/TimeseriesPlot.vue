@@ -14,10 +14,10 @@
     components: {
       LineChart
     },
-    props: {
-      regions: Array
-    },
     computed: {
+      regions: function() {
+        return this.$store.state.regions
+      },
       chartData: function() {
         let ds = this.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: timeSeries[r]}))
         // Each data need to be sorted with timestamps

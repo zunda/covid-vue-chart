@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TimeseriesPlot :regions="value" />
+    <TimeseriesPlot />
     <treeselect
       v-model="value"
       :multiple="true"
