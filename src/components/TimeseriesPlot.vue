@@ -118,9 +118,20 @@
                 enabled: true,
                 drag: true,
                 mode: 'x',
-                speed: 0
+                speed: 0,
+                onZoomComplete: function({chart}) {
+                  chart.options.refreshRange(
+                    chart.scales['x-axis-0'].min,
+                    chart.scales['x-axis-0'].max
+                  )
+                }
               }
             }
+          },
+          refreshRange: (min, max) => {
+            let x1 = Math.floor(min / (24*3600*1000)) * (24*3600*1000)
+            let x2 = Math.ceil(max / (24*3600*1000)) * (24*3600*1000)
+            this.$store.commit('setRange', {min: x1, max: x2})
           }
         }
       },
