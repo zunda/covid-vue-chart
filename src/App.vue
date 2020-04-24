@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>COVID-19 cases</h1>
+    <TimeseriesPlot/>
     <RegionSelector/>
   </div>
 </template>
@@ -11,6 +12,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import RegionSelector from './components/RegionSelector.vue'
+import TimeseriesPlot from './components/TimeseriesPlot.vue'
 
 const store = new Vuex.Store({
   state: {
@@ -103,6 +105,7 @@ export default {
   name: 'App',
   store,
   components: {
+    TimeseriesPlot,
     RegionSelector
   },
   mounted: function() {

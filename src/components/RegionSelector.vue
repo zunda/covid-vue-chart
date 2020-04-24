@@ -1,6 +1,5 @@
 <template>
   <div>
-    <TimeseriesPlot />
     <treeselect
       v-model="value"
       :multiple="true"
@@ -18,12 +17,9 @@
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import regions from '../assets/regions.json'
 
-  import TimeseriesPlot from './TimeseriesPlot.vue'
-
   export default {
     components: {
-      Treeselect,
-      TimeseriesPlot
+      Treeselect
     },
     computed: {
       value: {
