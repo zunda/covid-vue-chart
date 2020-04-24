@@ -29,9 +29,9 @@
       options: function () {
         let x0Ticks = {}
         let y0Ticks = {}
-        if (this.$store.state.tmin != undefined || this.$store.state.tmax != undefined) {
-          x0Ticks.min = this.$store.state.tmin
-          x0Ticks.max = this.$store.state.tmax
+        if (this.$store.state.tMin != undefined || this.$store.state.tMax != undefined) {
+          x0Ticks.min = this.$store.state.tMin
+          x0Ticks.max = this.$store.state.tMax
         } else if (this.$store.state.duration != undefined && this.chartData.timeMax != undefined) {
           x0Ticks.min = this.chartData.timeMax + this.$store.state.duration
           x0Ticks.max = undefined
