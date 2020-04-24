@@ -4,6 +4,7 @@
       v-model="duration"
       placeholder="days" type="number" size="4" min="1"
     />
+    <button v-on:click="resetZoom">Show all</button>
   </div>
 </template>
 
@@ -27,6 +28,11 @@
             this.$store.commit('setDuration',  undefined)
           }
         }
+      }
+    },
+    methods: {
+      resetZoom: function() {
+        this.$store.commit('setDuration',  undefined)
       }
     }
   }
