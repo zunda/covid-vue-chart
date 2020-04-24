@@ -2,7 +2,7 @@
   <div class="chart-control">
     <input
       v-model="duration"
-      placeholder="days" type="number" size="4" min="1" step="7"
+      placeholder="days" type="number" size="4" min="1"
     />
   </div>
 </template>
@@ -11,18 +11,22 @@
   export default {
     computed: {
       duration: {
-          get() {
-            let x = this.$store.state.duration
-            if (x != undefined && !isNaN(x)) {
-              return -x / (24*3600*1000)
-            } else {
-              return ''
-            }
-          },
-          set(duration) {
-            let x = parseFloat(duration)
-            this.$store.commit('setDuration',  -x * 24*3600*1000)
+        get() {
+          let x = this.$store.state.duration
+          if (x != undefined && !isNaN(x)) {
+            return -x / (24*3600*1000)
+          } else {
+            return ''
           }
+        },
+        set(duration) {
+          let x = parseFloat(duration)
+          if (!isNaN(x)) {
+            this.$store.commit('setDuration',  -x * 24*3600*1000)
+          } else {
+            this.$store.commit('setDuration',  undefined)
+          }
+        }
       }
     }
   }
