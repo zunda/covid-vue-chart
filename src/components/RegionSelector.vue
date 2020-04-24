@@ -28,7 +28,7 @@
         },
         set(ary) {
           this.$store.commit('setRegions',  ary)
-        },
+        }
       }
     },
     data: function () {
