@@ -20,20 +20,23 @@ const store = new Vuex.Store({
   state: {
     regions: [],
     duration: undefined,
-    range: undefined
+    tmin: undefined,
+    tmax: undefined
   },
   mutations: {
     setRegions: function(state, regions) {
       state.regions = regions
       updateLocation(state)
     },
-    setRange: function(state, range) {
-      state.range = range
+    setRange: function(state, obj) {
+      state.tmin = obj.min
+      state.tmax = obj.max
       state.duration = undefined
       updateLocation(state)
     },
     setDuration: function(state, duration) {
-      state.range = undefined
+      state.tmin = undefined
+      state.tmax = undefined
       state.duration = duration
       updateLocation(state)
     }
@@ -53,17 +56,14 @@ function updateLocation(state) {
   if (state.regions.length > 0) {
     pars.push("r=" + state.regions.join("-").replace(/ /g, "+"))
   }
-  if (state.range != undefined) {
-    let min = new Date(state.range.min)
-    let max = new Date(state.range.max)
-    pars.push("t=" +
-      min.getUTCFullYear() +
-      _pad(min.getUTCMonth() + 1) +
-      _pad(min.getUTCDate()) +
-      "-" +
-      max.getUTCFullYear() +
-      _pad(max.getUTCMonth() + 1) +
-      _pad(max.getUTCDate()))
+  if (state.tmin != undefined) {
+    let x = new Date(state.tmin)
+    let t = 't=' + x.getUTCFullYear() + _pad(x.getUTCMonth() + 1) + _pad(x.getUTCDate()) + '-'
+    if (state.tmax != undefined) {
+      let y = new Date(state.tmax)
+      t += y.getUTCFullYear() + _pad(y.getUTCMonth() + 1) + _pad(y.getUTCDate())
+    }
+    pars.push(t)
   } else if (state.duration != undefined) {
     pars.push("t=" + state.duration / (24 * 3600 * 1000))
   }
@@ -78,27 +78,27 @@ function parseLocation() {
   let q = new URLSearchParams(location.search)
   let res = {
     regions: q.getAll("r").map(x => x.split("-")).flat().filter(x => x.length > 0),
+    tmin: undefined,
+    tmax: undefined,
     duration: undefined
   }
   let t = q.get("t")
   if (t != undefined) {
-    let a = t.split("-").filter(x => x.length === 8)
-    if (a.length === 2) {
-      // t=yyyymmdd-yyyymmdd
-      let min = a[0].match(/(\d{4,4})(\d\d)(\d\d)/)
-      let max = a[1].match(/(\d{4,4})(\d\d)(\d\d)/)
-      if (min != null && max != null) {
-        res.range = {
-          min: Date.UTC(min[1], parseInt(min[2]) - 1, min[3]),
-          max: Date.UTC(max[1], parseInt(max[2]) - 1, max[3])
-        }
-      }
-    } else {
+    if (t[0] === "-") {
       // t=-ddd
       let x = parseFloat(t)
       if (!isNaN(x)) {
         res.duration = x * 24 * 3600 * 1000
       }
+    } else {
+      let a = t.split("-")
+      // t=yyyymmdd-yyyymmdd
+      let x = a[0] != undefined ? a[0].match(/(\d{4,4})(\d\d)(\d\d)/) : null
+      let min = x != null ? Date.UTC(x[1], parseInt(x[2]) - 1, x[3]) : null
+      if (min != null) res.tmin = min
+      let y = a[1] != undefined ? a[1].match(/(\d{4,4})(\d\d)(\d\d)/) : null
+      let max = y != null ? Date.UTC(y[1], parseInt(y[2]) - 1, y[3]) : null
+      if (max != null) res.tmax = max
     }
   }
   return res
@@ -119,8 +119,8 @@ export default {
     } else {
       store.commit('setRegions',  ['World'])
     }
-    if (q.range != undefined) {
-      store.commit('setRange', q.range)
+    if (q.tmin != undefined || q.tmax != undefined) {
+      store.commit('setRange', {min: q.tmin, max: q.tmax})
     } else if (q.duration != undefined) {
       store.commit('setDuration', q.duration)
     }
