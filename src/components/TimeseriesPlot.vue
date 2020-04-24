@@ -15,14 +15,8 @@
       LineChart
     },
     computed: {
-      regions: function() {
-        return this.$store.state.regions
-      },
-      range: function() {
-        return this.$store.state.range
-      },
       chartData: function() {
-        let ds = this.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: timeSeries[r]}))
+        let ds = this.$store.state.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: timeSeries[r]}))
         // Each data need to be sorted with timestamps
         let min = Math.min(...
           ds.map(x => x.data[0].x)
@@ -35,9 +29,9 @@
       options: function () {
         let x0Ticks = {}
         let y0Ticks = {}
-        if (this.range != undefined) {
-          x0Ticks.min = this.range.min
-          x0Ticks.max = this.range.max
+        if (this.$store.state.range != undefined) {
+          x0Ticks.min = this.$store.state.range.min
+          x0Ticks.max = this.$store.state.range.max
         } else if (this.$store.state.duration != undefined && this.chartData.timeMax != undefined) {
           x0Ticks.min = this.chartData.timeMax + this.$store.state.duration
           x0Ticks.max = undefined
