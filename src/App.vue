@@ -33,6 +33,7 @@ const store = new Vuex.Store({
       updateLocation(state)
     },
     setDuration: function(state, duration) {
+      state.range = undefined
       state.duration = duration
       updateLocation(state)
     }
