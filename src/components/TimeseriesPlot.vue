@@ -14,6 +14,11 @@
     components: {
       LineChart
     },
+    data: function() {
+      return {
+        timerId: undefined
+      }
+    },
     computed: {
       chartData: function() {
         let ds = this.$store.state.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: timeSeries[r]}))
@@ -126,9 +131,16 @@
             }
           },
           refreshRange: (min, max) => {
-            let x1 = Math.floor(min / (24*3600*1000)) * (24*3600*1000)
-            let x2 = Math.ceil(max / (24*3600*1000)) * (24*3600*1000)
-            this.$store.commit('setRange', {min: x1, max: x2})
+            if (this.timerId != undefined) {
+              clearTimeout(this.timerId)
+            }
+            let doRefreshRange = () => {
+              this.timerId = undefined
+              let x1 = Math.floor(min / (24*3600*1000)) * (24*3600*1000)
+              let x2 = Math.ceil(max / (24*3600*1000)) * (24*3600*1000)
+              this.$store.commit('setRange', {min: x1, max: x2})
+            }
+            this.timerId = setTimeout(doRefreshRange, 500)
           }
         }
       },
