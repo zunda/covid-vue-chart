@@ -8,6 +8,9 @@
 </template>
 
 <script>
+import moment from 'moment-timezone'
+moment.tz.setDefault('UTC');
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
