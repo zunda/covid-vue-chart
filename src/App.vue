@@ -122,10 +122,10 @@ export default {
     } else {
       store.commit('setRegions',  ['World'])
     }
-    if (q.tMin != undefined || q.tMax != undefined) {
-      store.commit('setRange', {min: q.tMin, max: q.tMax})
-    } else if (q.duration != undefined) {
+    if (q.duration != undefined) {
       store.commit('setDuration', q.duration)
+    } else {
+      store.commit('setRange', {min: q.tMin, max: q.tMax})
     }
   }
 }
