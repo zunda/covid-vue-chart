@@ -6,6 +6,8 @@
 </template>
 
 <script>
+  import { isMobile } from 'mobile-device-detect'
+
   import LineChart from './LineChart.js'
   import timeSeries from '../assets/timeSeries.json'
   import footnote from '../assets/footnote.json'
@@ -116,6 +118,16 @@
           },
           plugins: {
             zoom: {
+              pan: {
+                enabled: isMobile,
+                mode: 'x',
+                onPanComplete: function({chart}) {
+                  chart.options.refreshRange(
+                    chart.scales['x-axis-0'].min,
+                    chart.scales['x-axis-0'].max
+                  )
+                }
+              },
               zoom: {
                 enabled: true,
                 drag: true,
