@@ -9,7 +9,7 @@ yarn install
 ```
 
 ### Fetches and formats data to be plotted
-Creates `src/assets/regions.json`, `src/assets/timeSeries.json`, and `src/assets/timestamps.json`:
+Fetches, parses, and formats data to be plotted.
 
 ```
 yarn fetchdata
