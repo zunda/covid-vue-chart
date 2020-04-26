@@ -148,9 +148,7 @@
             }
             let doRefreshRange = () => {
               this.timerId = undefined
-              let x1 = Math.floor(min / (24*3600*1000)) * (24*3600*1000)
-              let x2 = Math.ceil(max / (24*3600*1000)) * (24*3600*1000)
-              this.$store.commit('setRange', {min: x1, max: x2})
+              this.$store.commit('setRange', {min: min, max: max})
             }
             if (isMobile) {
               this.timerId = setTimeout(doRefreshRange, 500)

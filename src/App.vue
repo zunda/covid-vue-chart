@@ -60,10 +60,10 @@ function updateLocation(state) {
     pars.push("r=" + state.regions.join("-").replace(/ /g, "+"))
   }
   if (state.tMin != undefined) {
-    let x = new Date(state.tMin)
+    let x = new Date(Math.round(state.tMin/(24*3600*1000))*24*3600*1000)
     let t = 't=' + x.getUTCFullYear() + _pad(x.getUTCMonth() + 1) + _pad(x.getUTCDate()) + '-'
     if (state.tMax != undefined) {
-      let y = new Date(state.tMax)
+      let y = new Date(Math.round(state.tMax/(24*3600*1000))*24*3600*1000)
       t += y.getUTCFullYear() + _pad(y.getUTCMonth() + 1) + _pad(y.getUTCDate())
     }
     pars.push(t)
