@@ -152,7 +152,11 @@
               let x2 = Math.ceil(max / (24*3600*1000)) * (24*3600*1000)
               this.$store.commit('setRange', {min: x1, max: x2})
             }
-            this.timerId = setTimeout(doRefreshRange, 500)
+            if (isMobile) {
+              this.timerId = setTimeout(doRefreshRange, 500)
+            } else {
+              doRefreshRange()
+            }
           }
         }
       },
