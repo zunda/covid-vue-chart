@@ -93,7 +93,7 @@
             yAxes: [{
               scaleLabel: {
                 display: true,
-                labelString: 'Cumulative confirmed'
+                labelString: 'Cumulative confirmed COVID-19 cases'
               },
               type: 'logarithmic',
               ticks: {

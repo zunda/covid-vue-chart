@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <h1>COVID-19 cases</h1>
     <TimeseriesPlot/>
     <RangeController/>
     <RegionSelector/>
