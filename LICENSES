@@ -1,4 +1,9 @@
 # License for dependent packages
+## @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/vue-fontawesome
+Font Awesome Free is free, open source, and GPL friendly. You can use it for
+commercial projects, open source projects, or really almost whatever you want.
+Full Font Awesome Free license: https://fontawesome.com/license/free.
+
 ## @riophae/vue-treeselect
 https://vue-treeselect.js.org/
 

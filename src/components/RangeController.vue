@@ -3,14 +3,35 @@
     <input
       v-model="duration"
       placeholder="days" type="number" size="4" min="1"
+      title="Number of recent days to be shown"
     />
-    <button :disabled="history.i == undefined || history.i == 0" v-on:click="goPrev()">Prev</button>
-    <button :disabled="history.i == undefined || history.i == history.max" v-on:click="goNext()">Next</button>
-    <button v-on:click="resetZoom">Show all</button>
+    <button
+      :disabled="history.i == undefined || history.i == 0"
+      v-on:click="goPrev()"
+      title="Show previous date range">
+      <font-awesome-icon icon="undo" />
+    </button>
+    <button :disabled="history.i == undefined || history.i == history.max"
+      v-on:click="goNext()"
+      title="Show next date range">
+      <font-awesome-icon icon="redo" />
+    </button>
+    <button v-on:click="resetZoom" title="Show entire data">
+      <font-awesome-icon icon="home" />
+    </button>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import { library } from '@fortawesome/fontawesome-svg-core'
+  import { faUndo, faRedo, faHome } from '@fortawesome/free-solid-svg-icons'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  library.add(faUndo)
+  library.add(faRedo)
+  library.add(faHome)
+  Vue.component('font-awesome-icon', FontAwesomeIcon)
+
   export default {
     data: function() {
       return {
@@ -107,7 +128,21 @@
 
 <style>
 .chart-control {
-  margin: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
   text-align: right;
+}
+
+input {
+  height: 1em;
+  margin: 0;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance:textfield;
 }
 </style>
