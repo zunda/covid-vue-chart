@@ -89,7 +89,7 @@ function parseLocation() {
     if (t[0] === "-") {
       // t=-ddd
       let x = parseFloat(t)
-      if (!isNaN(x)) {
+      if (!isNaN(x) && x < 10000) {
         res.duration = x * 24 * 3600 * 1000
       }
     } else {
