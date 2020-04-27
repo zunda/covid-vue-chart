@@ -17,7 +17,7 @@
       <font-awesome-icon icon="redo" />
     </button>
     <button v-on:click="resetZoom" title="Show entire data">
-      <font-awesome-icon icon="home" />
+      <font-awesome-icon icon="clinic-medical" />
     </button>
   </div>
 </template>
@@ -25,11 +25,11 @@
 <script>
   import Vue from 'vue'
   import { library } from '@fortawesome/fontawesome-svg-core'
-  import { faUndo, faRedo, faHome } from '@fortawesome/free-solid-svg-icons'
+  import { faUndo, faRedo, faClinicMedical } from '@fortawesome/free-solid-svg-icons'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   library.add(faUndo)
   library.add(faRedo)
-  library.add(faHome)
+  library.add(faClinicMedical)
   Vue.component('font-awesome-icon', FontAwesomeIcon)
 
   export default {
