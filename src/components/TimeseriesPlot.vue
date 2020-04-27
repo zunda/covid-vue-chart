@@ -64,6 +64,18 @@
         } else if (d < 180) {
           xUnit = 'week'
         }
+        let pan = isMobile ? {
+          enabled: true,
+          mode: 'x',
+          onPanComplete: function({chart}) {
+            chart.options.refreshRange(
+              chart.scales['x-axis-0'].min,
+              chart.scales['x-axis-0'].max
+            )
+          }
+        } : {
+          enabled: false
+        }
         return {
           animation: false,
           maintainAspectRatio: true,
@@ -118,16 +130,7 @@
           },
           plugins: {
             zoom: {
-              pan: {
-                enabled: isMobile,
-                mode: 'x',
-                onPanComplete: function({chart}) {
-                  chart.options.refreshRange(
-                    chart.scales['x-axis-0'].min,
-                    chart.scales['x-axis-0'].max
-                  )
-                }
-              },
+              pan: pan,
               zoom: {
                 enabled: true,
                 drag: true,
