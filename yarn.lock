@@ -949,6 +949,30 @@
     ts-node "^8"
     tslib "^1"
 
+"@fortawesome/fontawesome-common-types@^0.2.28":
+  version "0.2.28"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.28.tgz#1091bdfe63b3f139441e9cba27aa022bff97d8b2"
+  integrity sha512-gtis2/5yLdfI6n0ia0jH7NJs5i/Z/8M/ZbQL6jXQhCthEOe5Cr5NcQPhgTvFxNOtURE03/ZqUcEskdn2M+QaBg==
+
+"@fortawesome/fontawesome-svg-core@^1.2.28":
+  version "1.2.28"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.28.tgz#e5b8c8814ef375f01f5d7c132d3c3a2f83a3abf9"
+  integrity sha512-4LeaNHWvrneoU0i8b5RTOJHKx7E+y7jYejplR7uSVB34+mp3Veg7cbKk7NBCLiI4TyoWS1wh9ZdoyLJR8wSAdg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.28"
+
+"@fortawesome/free-solid-svg-icons@^5.13.0":
+  version "5.13.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.13.0.tgz#44d9118668ad96b4fd5c9434a43efc5903525739"
+  integrity sha512-IHUgDJdomv6YtG4p3zl1B5wWf9ffinHIvebqQOmV3U+3SLw4fC+LUCCgwfETkbTtjy5/Qws2VoVf6z/ETQpFpg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.28"
+
+"@fortawesome/vue-fontawesome@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.9.tgz#d3af6d4e50f337327de90447fe35fa1e117a2fbe"
+  integrity sha512-h/emhmZz+DfB2zOGLWawNwXq82UYhn9waTfUjLLmeaIqtnIyNt6kYlpQT/vzJjLZRDRvY2IEJAh1di5qKpKVpA==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -3332,6 +3356,13 @@ chartjs-plugin-colorschemes@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/chartjs-plugin-colorschemes/-/chartjs-plugin-colorschemes-0.4.0.tgz#7a310c32411ef0b5135df1f47da4d379e22220f7"
   integrity sha512-GUAulGFa6igdhi/xF9XopLJknwtXZT0wwEB+e/D4SJcRGY1HdwzX84pVn5BSpnk1idF6RJxZoA7w396R7BOE9A==
+
+chartjs-plugin-zoom@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/chartjs-plugin-zoom/-/chartjs-plugin-zoom-0.7.5.tgz#83ffd143b1807604d8ecabae1091b9c5abf91b84"
+  integrity sha512-OGVQXlw5meOD7ac+CBNO7yKg4Tk06eBb5LUIgpK/qgv7SjVB/89pWMQY3pxWnzCMI8FsoV3iTKQ2ZCOvh4+q6w==
+  dependencies:
+    hammerjs "^2.0.8"
 
 check-types@^8.0.3:
   version "8.0.3"
@@ -5953,6 +5984,11 @@ gzip-size@^5.0.0:
     duplexer "^0.1.1"
     pify "^4.0.1"
 
+hammerjs@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
+  integrity sha1-BO93hiz/K7edMPdpIJWTAiK/YPE=
+
 handle-thing@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/handle-thing/-/handle-thing-2.0.1.tgz#857f79ce359580c340d43081cc648970d0bb234e"
@@ -7737,7 +7773,19 @@ mkdirp@^1.0.3:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-moment@2.24.0, moment@^2.10.2, moment@^2.22.1, moment@^2.24.0:
+mobile-device-detect@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/mobile-device-detect/-/mobile-device-detect-0.3.3.tgz#6880f54c2e838d8dccbfc0d962d01a348db5faad"
+  integrity sha512-JOrQ2mwcBnEz/6hyvP/aXI8R03DnlwlQey7cukE6kCy9RLQbzchN5yMocEXuOw4NXdCsU6k7mEAolHwLxgPYwQ==
+
+moment-timezone@^0.5.28:
+  version "0.5.28"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.28.tgz#f093d789d091ed7b055d82aa81a82467f72e4338"
+  integrity sha512-TDJkZvAyKIVWg5EtVqRzU97w0Rb0YVbfpqyjgu6GwXCAohVRqwZjf4fOzDE6p1Ch98Sro/8hQQi65WDXW5STPw==
+  dependencies:
+    moment ">= 2.9.0"
+
+moment@2.24.0, "moment@>= 2.9.0", moment@^2.10.2, moment@^2.22.1, moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
@@ -11294,6 +11342,11 @@ vue@^2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
+
+vuex@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.2.0.tgz#86da7f26c3e131ff374870580109145a640ee5a8"
+  integrity sha512-qBZGJJ1gUNWZbfZlH7ylIPwENg3R0Ckpq+qPexF065kOMOt1Ixt8WDJmtssVv7OhepWD0+Qie7pOS8f0oQy1JA==
 
 watch-size@^2.0.0:
   version "2.0.0"

@@ -21,9 +21,9 @@ JAPAN_CONFIRMED='https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/da
 TOKYO_CONFIRMED='https://stopcovid19.metro.tokyo.lg.jp/data/130001_tokyo_covid19_patients.csv'
 
 # output
-TIMESTAMPS='src/assets/timestamps.json'
 REGIONS='src/assets/regions.json'
 TIMESERIES='src/assets/timeSeries.json'
+FOOTNOTE='src/assets/footnote.json'
 
 Prefectures = {
   "北海道" => "Hokkaido",
@@ -100,6 +100,9 @@ def count_up_jhu(hash, row, region)
 end
 
 timestamps = {refreshed: Time.now.utc}
+footnote =<<_END
+Data were refreshed around #{Time.now.utc.strftime("%Y-%m-%d %H:%M %Z")}.
+_END
 counts = Hash.new{|h, region| h[region] = Hash.new{|j, date| j[date] = 0}}
 
 $stderr.puts "Fetching and counting global data"
@@ -119,6 +122,9 @@ CSV.parse(open(US_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |dat
   count_up_jhu(counts, data, [c, s])
   count_up_jhu(counts, data, [c, s, a]) if a and not a.empty?
 end
+footnote += <<_END
+Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
+_END
 
 $stderr.puts "Fetching and counting data for Japan"
 CSV.parse(open(JAPAN_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
@@ -128,6 +134,9 @@ CSV.parse(open(JAPAN_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |
   date = Time.utc(data['年'], data['月'], data['日'])
   counts[region][date] += Integer(data['患者数（2020年3月28日からは感染者数）'])
 end
+footnote += <<_END
+Data for Japan are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
+_END
 
 $stderr.puts "Fetching and counting data for Tokyo"
 c = Hash.new{0}
@@ -147,6 +156,9 @@ c.keys.sort.each do |date|
   n += c[date]
   counts[r][date] = n
 end
+footnote += <<_END
+Data for Tokyo are from <a href="https://stopcovid19.metro.tokyo.lg.jp/">stopcovid19.metro.tokyo.lg.jp</a> &copy; 2020 Tokyo Metropolitan Government.
+_END
 
 $stderr.puts "Listing regions"
 region_tree = Array.new
@@ -174,6 +186,10 @@ File.open(REGIONS, 'w') do |f|
   f.print region_tree.to_json
 end
 
+footnote += <<_END
+Check licenses and fork me at <a href="https://github.com/zunda/covid-vue-chart">zunda/covid-vue-chart</a>.
+_END
+
 $stderr.puts "Formatting data"
 time_series = Hash.new
 counts.each_pair do |r, c|
@@ -182,6 +198,6 @@ end
 File.open(TIMESERIES, 'w') do |f|
   f.print time_series.to_json
 end
-File.open(TIMESTAMPS, 'w') do |f|
-  f.print timestamps.to_json
+File.open(FOOTNOTE, 'w') do |f|
+  f.print footnote.to_json
 end
