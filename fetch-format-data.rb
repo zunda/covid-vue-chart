@@ -83,6 +83,17 @@ def parsedate(str)
 	end
 end
 
+def parse_csv(location)
+  #location = File.basename(location)  # to test this script locally
+  begin
+    CSV.parse(open(location).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
+      yield data
+    end
+  rescue OpenURI::HTTPError => error
+    raise error.exception("#{location}: #{error.message}")
+  end
+end
+
 def count_up_jhu(hash, row, region)
   row.each do |h, count|
     next unless count
@@ -106,7 +117,7 @@ _END
 counts = Hash.new{|h, region| h[region] = Hash.new{|j, date| j[date] = 0}}
 
 $stderr.puts "Fetching and counting global data"
-CSV.parse(open(GLOBAL_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
+parse_csv(GLOBAL_CONFIRMED) do |data|
   c = data['Country/Region'].strip
   s = data['Province/State']&.strip
   count_up_jhu(counts, data, [c])
@@ -115,7 +126,7 @@ CSV.parse(open(GLOBAL_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do 
 end
 
 $stderr.puts "Fetching and counting data for US"
-CSV.parse(open(US_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
+parse_csv(US_CONFIRMED) do |data|
   c = data['Country_Region'].strip
   s = data['Province_State'].strip
   a = data['Admin2']&.strip
@@ -127,7 +138,7 @@ Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19"
 _END
 
 $stderr.puts "Fetching and counting data for Japan"
-CSV.parse(open(JAPAN_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
+parse_csv(JAPAN_CONFIRMED) do |data|
   p = data['都道府県'].strip
   p = Prefectures[p] || p
   region = ['Japan', p]
@@ -140,12 +151,12 @@ _END
 
 $stderr.puts "Fetching and counting data for Tokyo"
 c = Hash.new{0}
-CSV.parse(open(TOKYO_CONFIRMED).read.gsub(/\r\n/, "\n"), headers:true).map do |record|
-  next unless record['公表_年月日']
+parse_csv(TOKYO_CONFIRMED) do |data|
+  next unless data['公表_年月日']
   begin
-    date = Time.strptime(record['公表_年月日'] + " UTC", "%Y-%m-%d %z")
+    date = Time.strptime(data['公表_年月日'] + " UTC", "%Y-%m-%d %z")
   rescue NoMethodError => err
-    raise err.exception(record.inspect)
+    raise err.exception(data.inspect)
   end
   c[date] += 1
 end
