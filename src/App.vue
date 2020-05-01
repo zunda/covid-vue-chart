@@ -23,7 +23,8 @@ const store = new Vuex.Store({
     regions: [],
     duration: undefined,
     tMin: undefined,
-    tMax: undefined
+    tMax: undefined,
+    cumulative: true
   },
   mutations: {
     setRegions: function(state, regions) {
@@ -41,6 +42,10 @@ const store = new Vuex.Store({
       state.tMax = undefined
       state.duration = duration
       updateLocation(state)
+    },
+    setCumulative: function(state, flag) {
+      state.cumulative = flag
+      updateLocation(state)
     }
   },
 })
@@ -55,6 +60,9 @@ function _pad(number) {
 
 function updateLocation(state) {
   let pars = []
+  if (! state.cumulative) {
+    pars.push("n=t")
+  }
   if (state.regions.length > 0) {
     pars.push("r=" + state.regions.join("-").replace(/ /g, "+"))
   }
@@ -103,6 +111,7 @@ function parseLocation() {
       if (max != null) res.tMax = max
     }
   }
+  res.cumulative = !(q.get("n") === 't')
   return res
 }
 
@@ -126,6 +135,7 @@ export default {
     } else {
       store.commit('setRange', {min: q.tMin, max: q.tMax})
     }
+    store.commit('setCumulative', q.cumulative)
   }
 }
 </script>
