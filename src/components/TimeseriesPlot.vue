@@ -10,6 +10,7 @@
 
   import LineChart from './LineChart.js'
   import timeSeries from '../assets/timeSeries.json'
+  import newCases from '../assets/newCases.json'
   import footnote from '../assets/footnote.json'
 
   export default {
@@ -23,7 +24,8 @@
     },
     computed: {
       chartData: function() {
-        let ds = this.$store.state.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: timeSeries[r]}))
+        let ts = this.$store.state.cumulative ? timeSeries : newCases
+        let ds = this.$store.state.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: ts[r]}))
         // Each data need to be sorted with timestamps
         let min = Math.min(...
           ds.map(x => x.data[0].x)
@@ -105,7 +107,7 @@
             yAxes: [{
               scaleLabel: {
                 display: true,
-                labelString: 'Cumulative confirmed COVID-19 cases'
+                labelString: this.$store.state.cumulative ? 'Cumulative confirmed COVID-19 cases' : 'Daily new COVID-19 cases, 7-day moving average'
               },
               type: 'logarithmic',
               ticks: {

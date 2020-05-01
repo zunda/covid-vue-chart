@@ -20,9 +20,14 @@ US_CONFIRMED='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/c
 JAPAN_CONFIRMED='https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/prefectures.csv'
 TOKYO_CONFIRMED='https://stopcovid19.metro.tokyo.lg.jp/data/130001_tokyo_covid19_patients.csv'
 
+# running average
+AVG_HALF_WIDTH  = 3 # days
+AVG_STEP = 1  # days
+
 # output
 REGIONS='src/assets/regions.json'
 TIMESERIES='src/assets/timeSeries.json'
+NEWCASES='src/assets/newCases.json'
 FOOTNOTE='src/assets/footnote.json'
 
 Prefectures = {
@@ -201,14 +206,46 @@ footnote += <<_END
 Check licenses and fork me at <a href="https://github.com/zunda/covid-vue-chart">zunda/covid-vue-chart</a>.
 _END
 
+$stderr.puts "Calculating moving average"
+new_cases = Hash.new{|h, region| h[region] = Hash.new{|j, date| j[date] = 0}}
+avg_half_width = AVG_HALF_WIDTH * 24 * 3600
+avg_step = AVG_STEP * 24 * 3600
+counts.each_pair do |region, cumul|
+  dates = cumul.keys.sort
+  p = 0
+  diffs = dates.map{|d| x = cumul[d] - p; p = cumul[d]; [d, x]}.to_h
+  d1 = dates.first - avg_half_width
+  d2 = dates.last - avg_half_width
+  d1.to_i.step(d2.to_i, avg_step).each do |x|
+    d = Time.at(x).utc
+    dmin = d - avg_half_width
+    dmax = d + avg_half_width
+    data = diffs.select{|k, v| dmin <= k && k <= dmax}.values
+    if data.length > 0
+      new_cases[region][d] = data.inject(0.0, :+) / data.length
+    else
+      new_cases[region][d] = 0
+    end
+  end
+end
+
 $stderr.puts "Formatting data"
-time_series = Hash.new
+out = Hash.new
 counts.each_pair do |r, c|
-  time_series[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
+  out[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
 end
 File.open(TIMESERIES, 'w') do |f|
-  f.print time_series.to_json
+  f.print out.to_json
 end
+
+out = Hash.new
+new_cases.each_pair do |r, c|
+  out[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
+end
+File.open(NEWCASES, 'w') do |f|
+  f.print out.to_json
+end
+
 File.open(FOOTNOTE, 'w') do |f|
   f.print footnote.to_json
 end

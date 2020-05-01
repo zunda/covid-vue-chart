@@ -19,6 +19,10 @@
     <button v-on:click="resetZoom" title="Show entire data">
       <font-awesome-icon icon="clinic-medical" />
     </button>
+    <select v-model="cumulative" title="Select cumulative or daily new cases">
+      <option value="true" title="Show cumulative cases">Cumulative</option>
+      <option value="false" title="Show daily new cases">New</option>
+    </select>
   </div>
 </template>
 
@@ -60,6 +64,14 @@
           } else {
             this.$store.commit('setDuration',  undefined)
           }
+        }
+      },
+      cumulative: {
+        get() {
+          return this.$store.state.cumulative ? "true" : "false"
+        },
+        set(cumulative) {
+            this.$store.commit('setCumulative', cumulative === "true")
         }
       }
     },
