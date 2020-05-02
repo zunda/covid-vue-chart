@@ -13,6 +13,7 @@ require 'csv'
 require 'time'
 require 'json'
 require 'open-uri'
+require 'fileutils'
 
 # input
 GLOBAL_CONFIRMED='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
@@ -234,16 +235,22 @@ out = Hash.new
 counts.each_pair do |r, c|
   out[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
 end
-File.open(TIMESERIES, 'w') do |f|
-  f.print out.to_json
+out.each_pair do |r, c|
+  FileUtils.mkdir_p("public/timeSeries/#{File.dirname(r)}")
+  File.open("public/timeSeries/#{r}.json", 'w') do |f|
+    f.print out[r].to_json
+  end
 end
 
 out = Hash.new
 new_cases.each_pair do |r, c|
   out[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
 end
-File.open(NEWCASES, 'w') do |f|
-  f.print out.to_json
+out.each_pair do |r, c|
+  FileUtils.mkdir_p("public/newCases/#{File.dirname(r)}")
+  File.open("public/newCases/#{r}.json", 'w') do |f|
+    f.print out[r].to_json
+  end
 end
 
 File.open(FOOTNOTE, 'w') do |f|
