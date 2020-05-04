@@ -18,13 +18,18 @@ import TimeseriesPlot from './components/TimeseriesPlot.vue'
 import RangeController from './components/RangeController.vue'
 import RegionSelector from './components/RegionSelector.vue'
 
+import timeSeries from './assets/timeSeries.json'
+import newCases from './assets/newCases.json'
+
 const store = new Vuex.Store({
   state: {
     regions: [],
     duration: undefined,
     tMin: undefined,
     tMax: undefined,
-    cumulative: true
+    cumulative: true,
+    timeSeries: timeSeries,
+    newCases: newCases
   },
   mutations: {
     setRegions: function(state, regions) {
