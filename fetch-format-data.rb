@@ -149,7 +149,7 @@ parse_csv(JAPAN_CONFIRMED) do |data|
   p = Prefectures[p] || p
   region = ['Japan', p]
   date = Time.utc(data['年'], data['月'], data['日'])
-  counts[region][date] += Integer(data['患者数（2020年3月28日からは感染者数）'])
+  counts[region][date] += Integer(data['患者数（2020年3月28日からは感染者数）'].gsub(/,/, ''))
 end
 footnote += <<_END
 Data for Japan are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
