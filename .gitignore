@@ -22,6 +22,6 @@ yarn-error.log*
 
 # Artifacts
 public/newCases/
-public/timeSeries/
+public/cumulativeCases/
 src/assets/regions.json
 src/assets/footnote.json

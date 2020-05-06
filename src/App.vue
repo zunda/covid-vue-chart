@@ -19,7 +19,7 @@ import RangeController from './components/RangeController.vue'
 import RegionSelector from './components/RegionSelector.vue'
 
 let dataPoints = {
-  timeSeries: {},
+  cumulativeCases: {},
   newCases: {}
 }
 
@@ -126,11 +126,11 @@ function parseLocation() {
 }
 
 function updateDataSets(state) {
-  let ts = state.cumulative ? dataPoints.timeSeries : dataPoints.newCases
+  let ts = state.cumulative ? dataPoints.cumulativeCases : dataPoints.newCases
   let ds = state.regions.map(r => {
     if (ts[r] === undefined) {
       ts[r] = 'fetching'
-      let src = (state.cumulative ? "./timeSeries/" : "./newCases/") + r + '.json'
+      let src = (state.cumulative ? "./cumulativeCases/" : "./newCases/") + r + '.json'
       fetch(src).then(response => response.json()).then(
         data => {
           ts[r] = data

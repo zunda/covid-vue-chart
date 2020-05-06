@@ -231,25 +231,18 @@ counts.each_pair do |region, cumul|
 end
 
 $stderr.puts "Formatting data"
-out = Hash.new
-counts.each_pair do |r, c|
-  out[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
-end
-out.each_pair do |r, c|
-  FileUtils.mkdir_p("public/timeSeries/#{File.dirname(r)}")
-  File.open("public/timeSeries/#{r}.json", 'w') do |f|
-    f.print out[r].to_json
-  end
-end
+{cumulativeCases: counts, newCases: new_cases}.each_pair do |type, input|
+  input.each_pair do |r, c|
+    ts = c.keys.sort
+    data = ts.map{|d| {x: d.to_i * 1000, y: c[d]}}
 
-out = Hash.new
-new_cases.each_pair do |r, c|
-  out[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
-end
-out.each_pair do |r, c|
-  FileUtils.mkdir_p("public/newCases/#{File.dirname(r)}")
-  File.open("public/newCases/#{r}.json", 'w') do |f|
-    f.print out[r].to_json
+    dst = "public/#{type}/#{r.join("/")}.json"
+    FileUtils.mkdir_p(File.dirname(dst))
+    File.open(dst, 'w') do |f|
+      f.print data.to_json
+    end
+    ts = Time.at(ts[-1])
+    FileUtils.touch(dst, mtime: ts)
   end
 end
 
