@@ -22,16 +22,11 @@
     },
     computed: {
       chartData: function() {
-        let ts = this.$store.state.cumulative ? this.$store.state.timeSeries : this.$store.state.newCases
-        let ds = this.$store.state.regions.filter(r => ts[r] != undefined).map(r => ({label: r, data: ts[r]}))
-        // Each data need to be sorted with timestamps
-        let min = Math.min(...
-          ds.map(x => x.data[0].x)
-        )
-        let max = Math.max(...
-          ds.map(x => x.data[x.data.length - 1].x)
-        )
-        return { datasets: ds, timeMax: max, timeMin: min }
+        let ds = this.$store.state.dataSets
+        console.log(ds)
+        let min = this.$store.state.dMin
+        let max = this.$store.state.dMax
+        return { datasets: ds, timeMin: min, timeMax: max }
       },
       options: function () {
         let x0Ticks = {}

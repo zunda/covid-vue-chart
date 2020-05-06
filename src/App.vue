@@ -27,13 +27,15 @@ const store = new Vuex.Store({
     duration: undefined,
     tMin: undefined,
     tMax: undefined,
+    dMin: undefined,
+    dMax: undefined,
     cumulative: true,
-    timeSeries: timeSeries,
-    newCases: newCases
+    dataSets: []
   },
   mutations: {
     setRegions: function(state, regions) {
       state.regions = regions
+      updateDataSets(state)
       updateLocation(state)
     },
     setRange: function(state, obj) {
@@ -50,6 +52,7 @@ const store = new Vuex.Store({
     },
     setCumulative: function(state, flag) {
       state.cumulative = flag
+      updateDataSets(state)
       updateLocation(state)
     }
   },
@@ -118,6 +121,19 @@ function parseLocation() {
   }
   res.cumulative = !(q.get("n") === 't')
   return res
+}
+
+function updateDataSets(state) {
+  let ts = state.cumulative ? timeSeries : newCases
+  let ds = state.regions.filter(r => ts[r] != undefined).map(r => ({label: r, data: ts[r]}))
+  state.dataSets = ds
+  // Each data need to be sorted with timestamps
+  state.dMin = Math.min(...
+    ds.map(x => x.data[0].x)
+  )
+  state.dMax = Math.max(...
+    ds.map(x => x.data[x.data.length - 1].x)
+  )
 }
 
 export default {
