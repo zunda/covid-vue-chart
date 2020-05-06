@@ -18,8 +18,10 @@ import TimeseriesPlot from './components/TimeseriesPlot.vue'
 import RangeController from './components/RangeController.vue'
 import RegionSelector from './components/RegionSelector.vue'
 
-import timeSeries from './assets/timeSeries.json'
-import newCases from './assets/newCases.json'
+let dataPoints = {
+  timeSeries: {},
+  newCases: {}
+}
 
 const store = new Vuex.Store({
   state: {
@@ -124,12 +126,38 @@ function parseLocation() {
 }
 
 function updateDataSets(state) {
-  let ts = state.cumulative ? timeSeries : newCases
-  let ds = state.regions.filter(r => ts[r] != undefined).map(r => ({label: r, data: ts[r]}))
+  let ts = state.cumulative ? dataPoints.timeSeries : dataPoints.newCases
+  let ds = state.regions.map(r => {
+    if (ts[r] === undefined) {
+      ts[r] = 'fetching'
+      let src = (state.cumulative ? "./timeSeries/" : "./newCases/") + r + '.json'
+      fetch(src).then(response => response.json()).then(
+        data => {
+          ts[r] = data
+          updateDataSets(state)
+        }
+      ).catch(
+        err => {
+          ts[r] = err
+        }
+      )
+      return {label: r, data: []}
+    } else if (Array.isArray(ts[r])) {
+      // we alreadh have the data
+      return {label: r, data: ts[r]}
+    } else {
+      // wait for the async call to finish fetching the data
+      return {label: r, data: []}
+    }
+  })
   state.dataSets = ds
   // Each data need to be sorted with timestamps
-  state.dMin = Math.min(...  ds.map(x => x.data[0].x))
-  state.dMax = Math.max(...  ds.map(x => x.data[x.data.length - 1].x))
+  state.dMin = Math.min(...
+    ds.filter(d => Array.isArray(d.data) && d.data.length > 0).map(x => x.data[0].x)
+  )
+  state.dMax = Math.max(...
+    ds.filter(d => Array.isArray(d.data) && d.data.length > 0).map(x => x.data[x.data.length - 1].x)
+  )
 }
 
 export default {
