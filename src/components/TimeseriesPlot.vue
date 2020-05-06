@@ -9,8 +9,6 @@
   import { isMobile } from 'mobile-device-detect'
 
   import LineChart from './LineChart.js'
-  import timeSeries from '../assets/timeSeries.json'
-  import newCases from '../assets/newCases.json'
   import footnote from '../assets/footnote.json'
 
   export default {
@@ -24,16 +22,11 @@
     },
     computed: {
       chartData: function() {
-        let ts = this.$store.state.cumulative ? timeSeries : newCases
-        let ds = this.$store.state.regions.filter(r => timeSeries[r] != undefined).map(r => ({label: r, data: ts[r]}))
-        // Each data need to be sorted with timestamps
-        let min = Math.min(...
-          ds.map(x => x.data[0].x)
-        )
-        let max = Math.max(...
-          ds.map(x => x.data[x.data.length - 1].x)
-        )
-        return { datasets: ds, timeMax: max, timeMin: min }
+        return {
+          datasets: this.$store.state.dataSets,
+          timeMin: this.$store.state.dMin,
+          timeMax: this.$store.state.dMax
+        }
       },
       options: function () {
         let x0Ticks = {}

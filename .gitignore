@@ -21,7 +21,7 @@ yarn-error.log*
 *.sw?
 
 # Artifacts
+public/newCases/
+public/cumulativeCases/
 src/assets/regions.json
-src/assets/timeSeries.json
-src/assets/newCases.json
 src/assets/footnote.json

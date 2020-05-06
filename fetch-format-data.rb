@@ -13,6 +13,7 @@ require 'csv'
 require 'time'
 require 'json'
 require 'open-uri'
+require 'fileutils'
 
 # input
 GLOBAL_CONFIRMED='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
@@ -148,7 +149,7 @@ parse_csv(JAPAN_CONFIRMED) do |data|
   p = Prefectures[p] || p
   region = ['Japan', p]
   date = Time.utc(data['年'], data['月'], data['日'])
-  counts[region][date] += Integer(data['患者数（2020年3月28日からは感染者数）'])
+  counts[region][date] += Integer(data['患者数（2020年3月28日からは感染者数）'].gsub(/,/, ''))
 end
 footnote += <<_END
 Data for Japan are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
@@ -230,20 +231,19 @@ counts.each_pair do |region, cumul|
 end
 
 $stderr.puts "Formatting data"
-out = Hash.new
-counts.each_pair do |r, c|
-  out[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
-end
-File.open(TIMESERIES, 'w') do |f|
-  f.print out.to_json
-end
+{cumulativeCases: counts, newCases: new_cases}.each_pair do |type, input|
+  input.each_pair do |r, c|
+    ts = c.keys.sort
+    data = ts.map{|d| {x: d.to_i * 1000, y: c[d]}}
 
-out = Hash.new
-new_cases.each_pair do |r, c|
-  out[r.join("/")] = c.keys.sort.map{|d| {x: d.to_i * 1000, y: c[d]}}
-end
-File.open(NEWCASES, 'w') do |f|
-  f.print out.to_json
+    dst = "public/#{type}/#{r.join("/")}.json"
+    FileUtils.mkdir_p(File.dirname(dst))
+    File.open(dst, 'w') do |f|
+      f.print data.to_json
+    end
+    ts = Time.at(ts[-1])
+    FileUtils.touch(dst, mtime: ts)
+  end
 end
 
 File.open(FOOTNOTE, 'w') do |f|

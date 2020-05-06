@@ -18,17 +18,26 @@ import TimeseriesPlot from './components/TimeseriesPlot.vue'
 import RangeController from './components/RangeController.vue'
 import RegionSelector from './components/RegionSelector.vue'
 
+let dataPoints = {
+  cumulativeCases: {},
+  newCases: {}
+}
+
 const store = new Vuex.Store({
   state: {
     regions: [],
     duration: undefined,
     tMin: undefined,
     tMax: undefined,
-    cumulative: true
+    dMin: undefined,
+    dMax: undefined,
+    cumulative: true,
+    dataSets: []
   },
   mutations: {
     setRegions: function(state, regions) {
       state.regions = regions
+      updateDataSets(state)
       updateLocation(state)
     },
     setRange: function(state, obj) {
@@ -45,6 +54,7 @@ const store = new Vuex.Store({
     },
     setCumulative: function(state, flag) {
       state.cumulative = flag
+      updateDataSets(state)
       updateLocation(state)
     }
   },
@@ -113,6 +123,41 @@ function parseLocation() {
   }
   res.cumulative = !(q.get("n") === 't')
   return res
+}
+
+function updateDataSets(state) {
+  let ts = state.cumulative ? dataPoints.cumulativeCases : dataPoints.newCases
+  let ds = state.regions.map(r => {
+    if (ts[r] === undefined) {
+      ts[r] = 'fetching'
+      let src = (state.cumulative ? "./cumulativeCases/" : "./newCases/") + r + '.json'
+      fetch(src).then(response => response.json()).then(
+        data => {
+          ts[r] = data
+          updateDataSets(state)
+        }
+      ).catch(
+        err => {
+          ts[r] = err
+        }
+      )
+      return {label: r, data: []}
+    } else if (Array.isArray(ts[r])) {
+      // we alreadh have the data
+      return {label: r, data: ts[r]}
+    } else {
+      // wait for the async call to finish fetching the data
+      return {label: r, data: []}
+    }
+  })
+  state.dataSets = ds
+  // Each data need to be sorted with timestamps
+  state.dMin = Math.min(...
+    ds.filter(d => Array.isArray(d.data) && d.data.length > 0).map(x => x.data[0].x)
+  )
+  state.dMax = Math.max(...
+    ds.filter(d => Array.isArray(d.data) && d.data.length > 0).map(x => x.data[x.data.length - 1].x)
+  )
 }
 
 export default {
