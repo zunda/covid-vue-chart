@@ -22,11 +22,11 @@
     },
     computed: {
       chartData: function() {
-        let ds = this.$store.state.dataSets
-        console.log(ds)
-        let min = this.$store.state.dMin
-        let max = this.$store.state.dMax
-        return { datasets: ds, timeMin: min, timeMax: max }
+        return {
+          datasets: this.$store.state.dataSets,
+          timeMin: this.$store.state.dMin,
+          timeMax: this.$store.state.dMax
+        }
       },
       options: function () {
         let x0Ticks = {}

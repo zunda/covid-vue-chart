@@ -128,12 +128,8 @@ function updateDataSets(state) {
   let ds = state.regions.filter(r => ts[r] != undefined).map(r => ({label: r, data: ts[r]}))
   state.dataSets = ds
   // Each data need to be sorted with timestamps
-  state.dMin = Math.min(...
-    ds.map(x => x.data[0].x)
-  )
-  state.dMax = Math.max(...
-    ds.map(x => x.data[x.data.length - 1].x)
-  )
+  state.dMin = Math.min(...  ds.map(x => x.data[0].x))
+  state.dMax = Math.max(...  ds.map(x => x.data[x.data.length - 1].x))
 }
 
 export default {
