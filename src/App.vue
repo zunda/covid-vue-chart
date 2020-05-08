@@ -61,11 +61,8 @@ const store = new Vuex.Store({
 })
 
 function _pad(number) {
-  if (number < 10) {
-    return '0' + number
-  } else {
-    return '' + number
-  }
+  const pad = number < 10 ? "0" : ""
+  return `${pad}${number}`
 }
 
 function updateLocation(state) {
@@ -78,10 +75,10 @@ function updateLocation(state) {
   }
   if (state.tMin != undefined) {
     let x = new Date(Math.round(state.tMin/(24*3600*1000))*24*3600*1000)
-    let t = 't=' + x.getUTCFullYear() + _pad(x.getUTCMonth() + 1) + _pad(x.getUTCDate()) + '-'
+    let t = "t=" + x.getUTCFullYear() + _pad(x.getUTCMonth()+1) + _pad(x.getUTCDate()) + "-"
     if (state.tMax != undefined) {
       let y = new Date(Math.round(state.tMax/(24*3600*1000))*24*3600*1000)
-      t += y.getUTCFullYear() + _pad(y.getUTCMonth() + 1) + _pad(y.getUTCDate())
+      t += y.getUTCFullYear() + _pad(y.getUTCMonth()+1) + _pad(y.getUTCDate())
     }
     pars.push(t)
   } else if (state.duration != undefined) {
