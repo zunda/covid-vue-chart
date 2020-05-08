@@ -146,6 +146,7 @@
 }
 
 input {
+  width:  4em;
   height: 1em;
   margin: 0;
 }
