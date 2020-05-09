@@ -50,7 +50,7 @@
     computed: {
       duration: {
         get() {
-          let x = this.$store.state.duration
+          const x = this.$store.state.duration
           if (x != undefined && !isNaN(x)) {
             return -x / (24*3600*1000)
           } else {
@@ -58,7 +58,7 @@
           }
         },
         set(duration) {
-          let x = parseFloat(duration)
+          const x = parseFloat(duration)
           if (!isNaN(x)) {
             this.$store.commit('setDuration',  -x * 24*3600*1000)
           } else {
@@ -88,7 +88,7 @@
         this.zoomTo()
       },
       zoomTo: function() {
-        let i = this.history.i
+        const i = this.history.i
         if (this.history.h[i].duration != undefined) {
           this.$store.commit('setDuration',  this.history.h[i].duration)
         } else {
@@ -105,8 +105,8 @@
           if (this.timerId != undefined) {
             clearTimeout(this.timerId)
           }
-          let registerHistory = () => {
-            let newHistory = {
+          const registerHistory = () => {
+            const newHistory = {
               duration: undefined,
               min: undefined,
               max: undefined

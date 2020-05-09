@@ -18,7 +18,7 @@ import TimeseriesPlot from './components/TimeseriesPlot.vue'
 import RangeController from './components/RangeController.vue'
 import RegionSelector from './components/RegionSelector.vue'
 
-let dataPoints = {
+const dataPoints = {
   cumulativeCases: {},
   newCases: {}
 }
@@ -66,7 +66,7 @@ function _pad(number) {
 }
 
 function updateLocation(state) {
-  let pars = []
+  const pars = []
   if (! state.cumulative) {
     pars.push("n=t")
   }
@@ -74,47 +74,43 @@ function updateLocation(state) {
     pars.push("r=" + state.regions.join("-").replace(/ /g, "+"))
   }
   if (state.tMin != undefined) {
-    let x = new Date(Math.round(state.tMin/(24*3600*1000))*24*3600*1000)
+    const x = new Date(Math.round(state.tMin/(24*3600*1000))*24*3600*1000)
     let t = "t=" + x.getUTCFullYear() + _pad(x.getUTCMonth()+1) + _pad(x.getUTCDate()) + "-"
     if (state.tMax != undefined) {
-      let y = new Date(Math.round(state.tMax/(24*3600*1000))*24*3600*1000)
+      const y = new Date(Math.round(state.tMax/(24*3600*1000))*24*3600*1000)
       t += y.getUTCFullYear() + _pad(y.getUTCMonth()+1) + _pad(y.getUTCDate())
     }
     pars.push(t)
   } else if (state.duration != undefined) {
     pars.push("t=" + state.duration / (24 * 3600 * 1000))
   }
-  let q = ''
-  if (pars.length > 0) {
-    q = '?' + pars.join("&")
-  }
-  history.replaceState(null, null, q)
+  history.replaceState(null, null, pars.length > 0 ? '?' + pars.join("&") : '')
 }
 
 function parseLocation() {
-  let q = new URLSearchParams(location.search)
-  let res = {
+  const q = new URLSearchParams(location.search)
+  const res = {
     regions: q.getAll("r").map(x => x.split("-")).flat().filter(x => x.length > 0),
     tMin: undefined,
     tMax: undefined,
     duration: undefined
   }
-  let t = q.get("t")
+  const t = q.get("t")
   if (t != undefined) {
     if (t[0] === "-") {
       // t=-ddd
-      let x = parseFloat(t)
+      const x = parseFloat(t)
       if (!isNaN(x) && x < 10000) {
         res.duration = x * 24 * 3600 * 1000
       }
     } else {
-      let a = t.split("-")
+      const a = t.split("-")
       // t=yyyymmdd-yyyymmdd
-      let x = a[0] != undefined ? a[0].match(/(\d{4,4})(\d\d)(\d\d)/) : null
-      let min = x != null ? Date.UTC(x[1], parseInt(x[2]) - 1, x[3]) : null
+      const x = a[0] != undefined ? a[0].match(/(\d{4,4})(\d\d)(\d\d)/) : null
+      const min = x != null ? Date.UTC(x[1], parseInt(x[2]) - 1, x[3]) : null
       if (min != null) res.tMin = min
-      let y = a[1] != undefined ? a[1].match(/(\d{4,4})(\d\d)(\d\d)/) : null
-      let max = y != null ? Date.UTC(y[1], parseInt(y[2]) - 1, y[3]) : null
+      const y = a[1] != undefined ? a[1].match(/(\d{4,4})(\d\d)(\d\d)/) : null
+      const max = y != null ? Date.UTC(y[1], parseInt(y[2]) - 1, y[3]) : null
       if (max != null) res.tMax = max
     }
   }
@@ -123,11 +119,11 @@ function parseLocation() {
 }
 
 function updateDataSets(state) {
-  let ts = state.cumulative ? dataPoints.cumulativeCases : dataPoints.newCases
-  let ds = state.regions.map(r => {
+  const ts = state.cumulative ? dataPoints.cumulativeCases : dataPoints.newCases
+  const ds = state.regions.map(r => {
     if (ts[r] === undefined) {
       ts[r] = 'fetching'
-      let src = (state.cumulative ? "./cumulativeCases/" : "./newCases/") + r + '.json'
+      const src = (state.cumulative ? "./cumulativeCases/" : "./newCases/") + r + '.json'
       fetch(src).then(response => response.json()).then(
         data => {
           ts[r] = data
@@ -166,7 +162,7 @@ export default {
     RangeController
   },
   mounted: function() {
-    let q = parseLocation()
+    const q = parseLocation()
     if (q.regions.length > 0) {
       store.commit('setRegions',  q.regions)
     } else {

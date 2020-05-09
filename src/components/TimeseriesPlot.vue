@@ -29,8 +29,8 @@
         }
       },
       options: function () {
-        let x0Ticks = {}
-        let y0Ticks = {}
+        const x0Ticks = {}
+        const y0Ticks = {}
         if (this.$store.state.tMin != undefined || this.$store.state.tMax != undefined) {
           x0Ticks.min = this.$store.state.tMin
           x0Ticks.max = this.$store.state.tMax
@@ -39,15 +39,16 @@
           x0Ticks.max = undefined
         }
         if (x0Ticks.min != undefined) {
-          let p = (x0Ticks.max != undefined) ?
-            this.chartData.datasets.map(x => x.data.filter(p => x0Ticks.max >= p.x && p.x >= x0Ticks.min).map(p => p.y)).flat() :
-            this.chartData.datasets.map(x => x.data.filter(p => p.x >= x0Ticks.min).map(p => p.y)).flat()
-          let min = Math.min(...p)
-          let max = Math.max(...p)
-          let mergin = Math.pow(max/min, 0.05)
-          y0Ticks = {min: min/mergin, max: max*mergin}
+          const p = (x0Ticks.max != undefined) ?
+            this.chartData.datasets.map(x => x.data.filter(q => x0Ticks.max >= q.x && q.x >= x0Ticks.min).map(q => q.y)).flat() :
+            this.chartData.datasets.map(x => x.data.filter(q => q.x >= x0Ticks.min).map(q => q.y)).flat()
+          const min = Math.min(...p)
+          const max = Math.max(...p)
+          const mergin = Math.pow(max/min, 0.05)
+          y0Ticks.min = min/mergin
+          y0Ticks.max = max*mergin
         }
-        let d = (
+        const d = (
           ((x0Ticks.max != undefined) ? x0Ticks.max : this.chartData.timeMax) -
           ((x0Ticks.min != undefined) ? x0Ticks.min : this.chartData.timeMin)
         ) / ( 24*3600*1000 )
@@ -59,7 +60,7 @@
         } else if (d < 180) {
           xUnit = 'week'
         }
-        let pan = isMobile ? {
+        const pan = isMobile ? {
           enabled: true,
           mode: 'x',
           onPanComplete: function({chart}) {
@@ -144,7 +145,7 @@
             if (this.timerId != undefined) {
               clearTimeout(this.timerId)
             }
-            let doRefreshRange = () => {
+            const doRefreshRange = () => {
               this.timerId = undefined
               this.$store.commit('setRange', {min: min, max: max})
             }
