@@ -48,13 +48,18 @@
           y0Ticks.min = min/mergin
           y0Ticks.max = max*mergin
         }
-        const d = (
-          ((x0Ticks.max != undefined) ? x0Ticks.max : this.chartData.timeMax) -
-          ((x0Ticks.min != undefined) ? x0Ticks.min : this.chartData.timeMin)
-        ) / ( 24*3600*1000 )
+        const tMin = new Date(x0Ticks.min != undefined ? x0Ticks.min : this.chartData.timeMin)
+        const tMax = new Date(x0Ticks.max != undefined ? x0Ticks.max : this.chartData.timeMax)
+        const yearMin = tMin.getUTCFullYear()
+        const yearMax = tMax.getUTCFullYear()
+        let xLabel = yearMin === yearMax ? yearMax : yearMin + ' - ' + yearMax
+        const d = (tMax - tMin)/( 24*3600*1000 )
         let xUnit = 'month'
         if (d < 1.5) {
           xUnit = 'hour'
+          const dateMin = tMin.getUTCFullYear() + '/' + (tMin.getUTCMonth() + 1) + '/' + tMin.getUTCDate()
+          const dateMax = tMax.getUTCFullYear() + '/' + (tMax.getUTCMonth() + 1) + '/' + tMax.getUTCDate()
+          xLabel = dateMin === dateMax ? dateMax : dateMin + ' - ' + dateMax
         } else if (d < 11) {
           xUnit = 'day'
         } else if (d < 180) {
@@ -85,7 +90,7 @@
             xAxes: [{
               scaleLabel: {
                 display: true,
-                labelString: '2020'
+                labelString: xLabel
               },
               type: 'time',
               time: {
