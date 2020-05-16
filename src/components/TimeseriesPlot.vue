@@ -11,10 +11,10 @@
   import LineChart from './LineChart.js'
   import footnote from '../assets/footnote.json'
 
-	function _pad(number) {
-		const pad = number < 10 ? "0" : ""
-		return `${pad}${number}`
-	}
+  function _pad(number) {
+    const pad = number < 10 ? "0" : ""
+    return `${pad}${number}`
+  }
 
   export default {
     components: {
