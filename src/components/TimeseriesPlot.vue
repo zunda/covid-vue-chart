@@ -11,6 +11,11 @@
   import LineChart from './LineChart.js'
   import footnote from '../assets/footnote.json'
 
+  function _pad(number) {
+    const pad = number < 10 ? "0" : ""
+    return `${pad}${number}`
+  }
+
   export default {
     components: {
       LineChart
@@ -125,6 +130,22 @@
           },
           elements: {
             point: { radius: 1 }
+          },
+          tooltips: {
+            callbacks: {
+              label: function(item, data) {
+                const region = data.datasets[item.datasetIndex].label
+                let count = data.datasets[item.datasetIndex].data[item.index].y
+                if (!Number.isInteger(count)) {
+                  count = Math.round(count*10)/10
+                }
+                return region + ": " + count
+              },
+              title: function(item, data) {
+                const x = new Date(data.datasets[item[0].datasetIndex].data[item[0].index].x)
+                return x.getUTCFullYear() + "-" + _pad(x.getUTCMonth()+1) + "-" +  _pad(x.getUTCDate())
+              }
+            }
           },
           legend: {
             position: 'top'
