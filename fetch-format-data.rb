@@ -56,7 +56,7 @@ def count_up_jhu(hash, row, region)
     date = parsedate(h)
     next unless date
     begin
-      i = Integer(count)
+      i = Integer(count.sub(/\.0+$/, ''))
       if i > 0
         hash[region][date] += i
       end
