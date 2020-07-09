@@ -67,24 +67,35 @@ function _pad(number) {
 
 function updateLocation(state) {
   const pars = []
+  let title = 'COVID-19 ' + (state.cumulative ? '' : 'new ') + 'cases-'
   if (! state.cumulative) {
     pars.push("n=t")
   }
   if (state.regions.length > 0) {
     pars.push("r=" + state.regions.join("-").replace(/ /g, "+"))
+    title += state.regions.map(r => {
+      const a = r.split(/\//)
+      return a[a.length - 1]
+    }).join(',') + '-'
   }
   if (state.tMin != undefined) {
     const x = new Date(Math.round(state.tMin/(24*3600*1000))*24*3600*1000)
-    let t = "t=" + x.getUTCFullYear() + _pad(x.getUTCMonth()+1) + _pad(x.getUTCDate()) + "-"
+    const d1 = x.getUTCFullYear() + _pad(x.getUTCMonth()+1) + _pad(x.getUTCDate())
+    let t = "t=" + d1 + "-"
+    title += d1 + "-"
     if (state.tMax != undefined) {
       const y = new Date(Math.round(state.tMax/(24*3600*1000))*24*3600*1000)
-      t += y.getUTCFullYear() + _pad(y.getUTCMonth()+1) + _pad(y.getUTCDate())
+      const d2 = y.getUTCFullYear() + _pad(y.getUTCMonth()+1) + _pad(y.getUTCDate())
+      t += d2
+      title += d2
     }
     pars.push(t)
   } else if (state.duration != undefined) {
     pars.push("t=" + state.duration / (24 * 3600 * 1000))
+    title += Math.round(-state.duration / (24 * 3600 * 1000)) + "days"
   }
   history.replaceState(null, null, pars.length > 0 ? '?' + pars.join("&") : '')
+  document.title = title
 }
 
 function parseLocation() {
