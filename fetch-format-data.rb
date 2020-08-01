@@ -42,7 +42,7 @@ end
 def parse_csv(location)
   #location = File.basename(location)  # to test this script locally
   begin
-    CSV.parse(open(location).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
+    CSV.parse(URI.open(location).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
       yield data
     end
   rescue OpenURI::HTTPError => error
