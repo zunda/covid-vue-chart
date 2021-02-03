@@ -101,7 +101,7 @@ parse_csv(JAPAN_CONFIRMED) do |data|
   counts[region][date] += Integer(data['testedPositive'].gsub(/,/, ''))
 end
 footnote += <<_END
-Data for Japan are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
+Data for Japan are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE and are available through 2021-01-30.
 _END
 
 $stderr.puts "Fetching and counting data for Tokyo"
