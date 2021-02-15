@@ -39,10 +39,18 @@ def parsedate(str)
 	end
 end
 
-def parse_csv(location)
-  #location = File.basename(location)  # to test this script locally
+def parse_data(location, **opts)
+  parser = opts[:parser] || CSV
+  if parser == CSV
+    parser_opts = {headers: true}
+  else
+    parser_opts = {}
+  end
+  if opts[:local]
+    location = File.basename(location)  # to test this script locally
+  end
   begin
-    CSV.parse(URI.open(location).read.gsub(/\r\n/, "\n"), headers:true).each do |data|
+    parser.parse(URI.open(location).read.gsub(/\r\n/, "\n"), **parser_opts).each do |data|
       yield data
     end
   rescue OpenURI::HTTPError => error
@@ -74,7 +82,7 @@ _END
   counts = Hash.new{|h, region| h[region] = Hash.new{|j, date| j[date] = 0}}
 
   $stderr.puts "Fetching and counting global data"
-  parse_csv(GLOBAL_CONFIRMED) do |data|
+  parse_data(GLOBAL_CONFIRMED) do |data|
     c = data['Country/Region'].strip
     s = data['Province/State']&.strip
     count_up_jhu(counts, data, [c])
@@ -83,7 +91,7 @@ _END
   end
 
   $stderr.puts "Fetching and counting data for US"
-  parse_csv(US_CONFIRMED) do |data|
+  parse_data(US_CONFIRMED) do |data|
     c = data['Country_Region'].strip
     s = data['Province_State'].strip
     a = data['Admin2']&.strip
@@ -95,7 +103,7 @@ Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19"
 _END
 
   $stderr.puts "Fetching and counting data for Japan"
-  parse_csv(JAPAN_CONFIRMED) do |data|
+  parse_data(JAPAN_CONFIRMED) do |data|
     p = data['prefectureNameE'].strip
     region = ['Japan', p]
     date = Time.utc(data['year'], data['month'], data['date'])
@@ -107,7 +115,7 @@ _END
 
   $stderr.puts "Fetching and counting data for Tokyo"
   c = Hash.new{0}
-  parse_csv(TOKYO_CONFIRMED) do |data|
+  parse_data(TOKYO_CONFIRMED) do |data|
     next unless data['公表_年月日']
     begin
       date = Time.strptime(data['公表_年月日'] + " UTC", "%Y-%m-%d %z")
