@@ -246,17 +246,28 @@ _END
   avg_step = AVG_STEP * 24 * 3600
   counts.each_pair do |region, cumul|
     dates = cumul.keys.sort
+
     p = 0
     diffs = dates.map{|d| x = cumul[d] - p; p = cumul[d]; [d, x]}.to_h
+
+    dates_cur = 0
+    dates_tot = dates.length
+    dates_avg = []
+
     d1 = dates.first - avg_half_width
     d2 = dates.last - avg_half_width
     d1.to_i.step(d2.to_i, avg_step).each do |x|
       d = Time.at(x).utc
       dmin = d - avg_half_width
       dmax = d + avg_half_width
-      data = diffs.select{|k, v| dmin <= k && k <= dmax}.values
-      if data.length > 0
-        new_cases[region][d] = data.inject(0.0, :+) / data.length
+      dates_avg = dates_avg.drop_while{|x| x < dmin}
+      while dates_cur < dates_tot
+        break if dmax < dates[dates_cur]
+        dates_avg << dates[dates_cur]
+        dates_cur += 1
+      end
+      if dates_avg.length > 0
+        new_cases[region][d] = dates_avg.map{|x| diffs[x]}.inject(0.0, :+) / dates_avg.length
       else
         new_cases[region][d] = 0
       end
