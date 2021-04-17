@@ -79,8 +79,6 @@ AVG_STEP = 1  # days
 
 # output
 REGIONS='src/assets/regions.json'
-TIMESERIES='src/assets/timeSeries.json'
-NEWCASES='src/assets/newCases.json'
 FOOTNOTE='src/assets/footnote.json'
 
 def parsedate(str)
