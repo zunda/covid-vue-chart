@@ -255,9 +255,9 @@ _END
     p = 0
     diffs = dates.map{|d| x = cumul[d] - p; p = cumul[d]; [d, x]}.to_h
 
-    dates_cur = 0
-    dates_tot = dates.length
-    dates_avg = []
+    i1 = 0
+    i2 = 0
+    imax = dates.length
 
     d1 = dates.first - avg_half_width
     d2 = dates.last - avg_half_width
@@ -265,14 +265,17 @@ _END
       d = Time.at(x).utc
       dmin = d - avg_half_width
       dmax = d + avg_half_width
-      dates_avg = dates_avg.drop_while{|x| x < dmin}
-      while dates_cur < dates_tot
-        break if dmax < dates[dates_cur]
-        dates_avg << dates[dates_cur]
-        dates_cur += 1
+      while i1 < imax and dates[i1] < dmin
+        i1 += 1
       end
-      if dates_avg.length > 0
-        new_cases[region][d] = dates_avg.map{|x| diffs[x]}.inject(0.0, :+) / dates_avg.length
+      if i2 < i1
+        i2 = i1
+      end
+      while i2 < imax and dates[i2] <= dmax
+        i2 += 1
+      end
+      if i2 - i1 > 0
+        new_cases[region][d] = dates[i1...i2].map{|x| diffs[x]}.inject(0.0, :+) / (i2 - i1)
       else
         new_cases[region][d] = 0
       end
