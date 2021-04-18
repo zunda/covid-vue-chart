@@ -142,78 +142,71 @@ _END
     end
   end
 
-  th = []
-  th << Thread.new do
-    $stderr.puts "Fetching and counting data for US"
-    parse_data(US_CONFIRMED) do |x|
-      x.each do |data|
-        c = data['Country_Region'].strip
-        s = data['Province_State'].strip
-        a = data['Admin2']&.strip
-        count_up_jhu(counts, data, [c, s])
-        count_up_jhu(counts, data, [c, s, a]) if a and not a.empty?
-      end
+  $stderr.puts "Fetching and counting data for US"
+  parse_data(US_CONFIRMED) do |x|
+    x.each do |data|
+      c = data['Country_Region'].strip
+      s = data['Province_State'].strip
+      a = data['Admin2']&.strip
+      count_up_jhu(counts, data, [c, s])
+      count_up_jhu(counts, data, [c, s, a]) if a and not a.empty?
     end
-    footnote += <<_END
+  end
+  footnote += <<_END
 Global and US data are from <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a> &copy; 2020 Johns Hopkins University, educational and academic research purposes only.
 _END
-  end
 
-  th << Thread.new do
-    $stderr.puts "Fetching and counting data for Japan for earlier data"
-    parse_data(JAPAN_CONFIRMED) do |x|
-      x.each do |data|
-        date = Time.utc(data['year'], data['month'], data['date'])
-        if date < CORONA_GO_JP_CUTOVER
-          region = ['Japan', data['prefectureNameE'].strip]
-          counts[region][date] = Integer(data['testedPositive'].gsub(/,/, ''))
-        end
+  $stderr.puts "Fetching and counting data for Japan for earlier data"
+  parse_data(JAPAN_CONFIRMED) do |x|
+    x.each do |data|
+      date = Time.utc(data['year'], data['month'], data['date'])
+      if date < CORONA_GO_JP_CUTOVER
+        region = ['Japan', data['prefectureNameE'].strip]
+        counts[region][date] = Integer(data['testedPositive'].gsub(/,/, ''))
       end
     end
-    footnote += <<_END
+  end
+  footnote += <<_END
 Data for Japan before #{CORONA_GO_JP_CUTOVER.strftime("%Y-%m-%d")} are from <a href="https://github.com/kaz-ogiwara/covid19">kaz-ogiwara/covid19</a> &copy; TOYO KEIZAI ONLINE.
 _END
 
-    $stderr.puts "Fetching and counting data for Japan"
-    parse_data(CORONA_GO_JP, parser: JSON) do |json|
-      json['itemList'].each do |data|
-        date = parsedate(data['date'])
-        if date >= CORONA_GO_JP_CUTOVER
-          region = ['Japan', JAPAN_PREF_NAMES[data['name_jp']]]
-          counts[region][date] = Integer(data['npatients'])
-        end
+  $stderr.puts "Fetching and counting data for Japan"
+  parse_data(CORONA_GO_JP, parser: JSON) do |json|
+    json['itemList'].each do |data|
+      date = parsedate(data['date'])
+      if date >= CORONA_GO_JP_CUTOVER
+        region = ['Japan', JAPAN_PREF_NAMES[data['name_jp']]]
+        counts[region][date] = Integer(data['npatients'])
       end
     end
-    footnote += <<_END
+  end
+  footnote += <<_END
 Data for Japan are from and &copy; by <a href="https://corona.go.jp/dashboard/">Office for Novel Coronavirus Disease Control, Cabinet Secretariat, Government of Japan</a>.
 _END
 
-    $stderr.puts "Fetching and counting data for Tokyo"
-    c = Hash.new{0}
-    parse_data(TOKYO_CONFIRMED) do |x|
-      x.each do |data|
-        next unless data['公表_年月日']
-        begin
-          date = Time.strptime(data['公表_年月日'] + " UTC", "%Y-%m-%d %z")
-        rescue NoMethodError => err
-          raise err.exception(data.inspect)
-        end
-        c[date] += 1
+  $stderr.puts "Fetching and counting data for Tokyo"
+  c = Hash.new{0}
+  parse_data(TOKYO_CONFIRMED) do |x|
+    x.each do |data|
+      next unless data['公表_年月日']
+      begin
+        date = Time.strptime(data['公表_年月日'] + " UTC", "%Y-%m-%d %z")
+      rescue NoMethodError => err
+        raise err.exception(data.inspect)
       end
+      c[date] += 1
     end
-    r = ['Japan', 'Tokyo']
-    counts.delete(r)
-    n = 0
-    c.keys.sort.each do |date|
-      n += c[date]
-      counts[r][date] = n
-    end
-    footnote += <<_END
+  end
+  r = ['Japan', 'Tokyo']
+  counts.delete(r)
+  n = 0
+  c.keys.sort.each do |date|
+    n += c[date]
+    counts[r][date] = n
+  end
+  footnote += <<_END
 Data for Tokyo are from <a href="https://stopcovid19.metro.tokyo.lg.jp/">stopcovid19.metro.tokyo.lg.jp</a> &copy; 2020 Tokyo Metropolitan Government.
 _END
-  end
-
-  th.each{|t| t.join}
 
   $stderr.puts "Listing regions"
   region_tree = Array.new
@@ -255,9 +248,9 @@ _END
     p = 0
     diffs = dates.map{|d| x = cumul[d] - p; p = cumul[d]; [d, x]}.to_h
 
-    dates_cur = 0
-    dates_tot = dates.length
-    dates_avg = []
+    i1 = 0
+    i2 = 0
+    imax = dates.length
 
     d1 = dates.first - avg_half_width
     d2 = dates.last - avg_half_width
@@ -265,14 +258,17 @@ _END
       d = Time.at(x).utc
       dmin = d - avg_half_width
       dmax = d + avg_half_width
-      dates_avg = dates_avg.drop_while{|x| x < dmin}
-      while dates_cur < dates_tot
-        break if dmax < dates[dates_cur]
-        dates_avg << dates[dates_cur]
-        dates_cur += 1
+      while i1 < imax and dates[i1] < dmin
+        i1 += 1
       end
-      if dates_avg.length > 0
-        new_cases[region][d] = dates_avg.map{|x| diffs[x]}.inject(0.0, :+) / dates_avg.length
+      if i2 < i1
+        i2 = i1
+      end
+      while i2 < imax and dates[i2] <= dmax
+        i2 += 1
+      end
+      if i2 - i1 > 0
+        new_cases[region][d] = dates[i1...i2].map{|x| diffs[x]}.inject(0.0, :+) / (i2 - i1)
       else
         new_cases[region][d] = 0
       end
