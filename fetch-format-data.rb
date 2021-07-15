@@ -281,10 +281,12 @@ _END
       ts = c.keys.sort
       data = ts.map{|d| {x: d.to_i * 1000, y: c[d]}}
 
-      dst = "public/#{type}/#{r.join("/")}.json"
+      dst = "public/#{type}/#{r.join("/")}.json.gz"
       FileUtils.mkdir_p(File.dirname(dst))
       File.open(dst, 'w') do |f|
-        f.print data.to_json
+        gz = Zlib::GzipWriter.new(f)
+        gz.write data.to_json
+        gz.close
       end
       ts = Time.at(ts[-1])
       FileUtils.touch(dst, mtime: ts)
