@@ -138,11 +138,17 @@ function updateDataSets(state) {
       ts[r] = 'fetching'
       const src = (state.cumulative ? "./cumulativeCases/" : "./newCases/") + r + '.json.gz'
       fetch(src).then(
-        response => response.body.getReader().read()
+        response => new Promise((resolve, reject) => {
+          try {
+            resolve(response.body.getReader().read())
+          } catch(err) {
+            reject("reading response body: " + err.message)
+          }
+        })
       ).then(
         gzipped_body => new Promise((resolve, reject) => {
           zlib.gunzip(gzipped_body.value, (err, result) => {
-            if (err) {reject(err.message)}
+            if (err) {reject("gunzipping data: " + err.message)}
             resolve(result)
           })
         })
@@ -152,7 +158,7 @@ function updateDataSets(state) {
             ts[r] = JSON.parse(text)
             updateDataSets(state)
           } catch(err) {
-            reject(err)
+            reject("parsing JSON: " + err.message)
           }
         })
       ).catch(
