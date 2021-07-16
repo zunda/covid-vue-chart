@@ -10,6 +10,8 @@
 import moment from 'moment-timezone'
 moment.tz.setDefault('UTC');
 
+import zlib from 'zlib'
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
@@ -134,14 +136,28 @@ function updateDataSets(state) {
   const ds = state.regions.map(r => {
     if (ts[r] === undefined) {
       ts[r] = 'fetching'
-      const src = (state.cumulative ? "./cumulativeCases/" : "./newCases/") + r + '.json'
-      fetch(src).then(response => response.json()).then(
-        data => {
-          ts[r] = data
-          updateDataSets(state)
-        }
+      const src = (state.cumulative ? "./cumulativeCases/" : "./newCases/") + r + '.json.gz'
+      fetch(src).then(
+        response => response.body.getReader().read()
+      ).then(
+        gzipped_body => new Promise((resolve, reject) => {
+          zlib.gunzip(gzipped_body.value, (err, result) => {
+            if (err) {reject(err.message)}
+            resolve(result)
+          })
+        })
+      ).then(
+        text => new Promise((resolve, reject) => {
+          try {
+            ts[r] = JSON.parse(text)
+            updateDataSets(state)
+          } catch(err) {
+            reject(err)
+          }
+        })
       ).catch(
         err => {
+          console.error(err)
           ts[r] = err
         }
       )
