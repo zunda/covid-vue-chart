@@ -21,6 +21,7 @@
     "chartjs-plugin-colorschemes": "^0.4.0",
     "chartjs-plugin-zoom": "^0.7.5",
     "core-js": "^3.6.4",
+    "is-svg": "^4.2.2",
     "mobile-device-detect": "^0.3.3",
     "moment-timezone": "^0.5.28",
     "vue": "^2.6.11",
