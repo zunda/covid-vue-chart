@@ -71,7 +71,6 @@ US_CONFIRMED='https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/c
 CORONA_GO_JP='https://opendata.corona.go.jp/api/Covid19JapanAll'
 CORONA_GO_JP_CUTOVER = Time.utc(2021, 1, 1)
 JAPAN_CONFIRMED='https://raw.githubusercontent.com/kaz-ogiwara/covid19/master/data/prefectures.csv'
-TOKYO_CONFIRMED='https://stopcovid19.metro.tokyo.lg.jp/data/130001_tokyo_covid19_patients.csv'
 
 # running average
 AVG_HALF_WIDTH  = 3 # days
@@ -182,30 +181,6 @@ _END
   end
   footnote += <<_END
 Data for Japan are from and &copy; by <a href="https://corona.go.jp/dashboard/">Office for Novel Coronavirus Disease Control, Cabinet Secretariat, Government of Japan</a>.
-_END
-
-  $stderr.puts "Fetching and counting data for Tokyo"
-  c = Hash.new{0}
-  parse_data(TOKYO_CONFIRMED) do |x|
-    x.each do |data|
-      next unless data['公表_年月日']
-      begin
-        date = Time.strptime(data['公表_年月日'] + " UTC", "%Y-%m-%d %z")
-      rescue NoMethodError => err
-        raise err.exception(data.inspect)
-      end
-      c[date] += 1
-    end
-  end
-  r = ['Japan', 'Tokyo']
-  counts.delete(r)
-  n = 0
-  c.keys.sort.each do |date|
-    n += c[date]
-    counts[r][date] = n
-  end
-  footnote += <<_END
-Data for Tokyo are from <a href="https://stopcovid19.metro.tokyo.lg.jp/">stopcovid19.metro.tokyo.lg.jp</a> &copy; 2020 Tokyo Metropolitan Government.
 _END
 
   $stderr.puts "Listing regions"
